@@ -8,9 +8,8 @@
 
 ### 와이어프레임
 
-![diagram-export-2022  6  20  오후 3_03_39](https://user-images.githubusercontent.com/31721097/174538170-b6d5f23f-4852-4e7f-9ee7-f0eddc3ebe36.svg)
-
+<img src="https://raw.githubusercontent.com/Backseungchan/terrarium/2615f464d48db16a998fd44061c9c4356dd54c8c/%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84.svg">
 
 ### 개발해야 하는 기능들
 
-![KakaoTalk_Photo_2022-06-20-15-07-56](https://user-images.githubusercontent.com/31721097/174538191-17839a01-8100-4430-84cf-51abc78f858b.jpeg)
+<img src = "https://github.com/Backseungchan/terrarium/blob/main/api.jpg?raw=true">
