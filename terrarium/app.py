@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from pymongo import MongoClient
 import jwt
 import datetime
@@ -6,12 +7,24 @@ import certifi
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
+=======
+from flask import Flask, render_template, request, jsonify
+import json
+from static.sampledata import posts, replies
+import certifi
+from pymongo import MongoClient
+from bson.objectid import ObjectId
+>>>>>>> 3079aa59d88b5cc9851696b26378b765cb540572
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
 SECRET_KEY = 'SPARTA'
+
+ca = certifi.where()
+client = MongoClient('mongodb+srv://test:sparta@cluster0.cdgld5e.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
+db = client.terrarium
 
 ca = certifi.where()
 client = MongoClient('mongodb+srv://test:sparta@cluster0.cdgld5e.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
@@ -87,5 +100,54 @@ def check_dup():
     exists = bool(db.users.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
 
+@app.route('/mypage')
+def mypage_pw():
+    return render_template("mypage.html", page="mypage_pwconfirm")
+
+
+@app.route('/mypage/<page>')
+def mypage(page):
+    print(json.dumps(posts))
+    return render_template("mypage.html", page=page, posts=posts, replies=replies)
+
+@app.route('/reply_sample')
+def reply_sample():
+    # event_id = "62b18347cfa92ebfb2dbccb5"
+    uid = 15
+    replies_list = list(db.posts.find_one({"postnum": 1}, {"_id":False})["replies"])
+    print(replies_list)
+    return render_template("reply_sample.html", replies=replies_list, postnum=1, uid=uid)
+
+@app.route('/reply', methods=['POST'])
+def reply_post():
+    postnum_receive = int(request.form['postnum_give'])
+    uid_receive = request.form['uid_give']
+    name_receive = request.form['name_give']
+    text_receive = request.form['text_give']
+    print(postnum_receive, uid_receive, name_receive, text_receive)
+    replies_num = len(list(db.posts.find_one({"postnum": postnum_receive}, {"_id": False})["replies"]))
+    print(replies_num)
+    data = {
+        'uid': uid_receive,
+        "name": name_receive,
+        "text": text_receive,
+        "replynum": str(replies_num + 1)
+    }
+    db.posts.update_one({"postnum":postnum_receive}, {'$push': {'replies': data}})
+    return jsonify({'msg': 'POST(완료) 연결 완료!'})
+
+@app.route('/reply/del', methods=['POST'])
+def reply_delete():
+    postnum_receive = int(request.form['postnum_give'])
+    replynum_receive = int(request.form['replynum_give'])
+    print(postnum_receive, replynum_receive)
+    db.posts.update_one({"postnum": postnum_receive}, {'$pull': {'replies': {"replynum" : replynum_receive}}})
+    return jsonify({'msg': 'POST(완료) 연결 완료!'})
+
+
 if __name__ == '__main__':
+<<<<<<< HEAD
     app.run('0.0.0.0', port=5000, debug=True)
+=======
+    app.run('0.0.0.0', port=8000, debug=True)
+>>>>>>> 3079aa59d88b5cc9851696b26378b765cb540572
