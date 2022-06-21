@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>🌿Terrarium</title>
+	<!-- og 태그-->
+	<meta property="og:title" content="🌿Terrarium - 테라리움">
+	<meta property="og:image" content="/og_image.jpg">
+	<meta property="og:description" content="잘 키운 반려식물 열 반려동물 안부럽다? 내가 키운 식물로 재테크 까지 모든 건 테라리움에서~">
+	<!-- jQuery 로드 -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<!-- 부트스트랩 CSS 로드 -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<!-- 부트스트랩 Javascript(애니메이션 등에 사용됨) 로드 -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+		crossorigin="anonymous"></script>
+	<!-- 파일 업로드 라이브러리 -->
+	<script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+	<!-- 테마 CSS 로드(지금은 폰트만 있는 상태, theme.css 수정 시 주석도 수정해주세요) -->
+	<link rel="stylesheet" href="../static/theme.css">
+	<link rel="stylesheet" href="../static/upload.css">
+	<script>
+		// 이미지 업로드시 썸네일 형식으로 비쳐줌
+		function setThumbnail(event) {
+			bsCustomFileInput.init()
+			var reader = new FileReader()
+
+			reader.onload = function (event) {
+				document.querySelector("#thumbnail").setAttribute("src", event.target.result);
+			};
+
+			reader.readAsDataURL(event.target.files[0]);
+		}
+
+		// 취소 버튼
+		function cancel() {
+			window.location.href("#")
+		}
+
+		// 완료 버튼
+		function posting(category) {
+
+			let title = $('#title').val()
+			let pic = $('#pic')[0].files[0]
+			let contents = $('#contents').val()
+
+			let form_data = new FormData()
+			form_data.append("title", title)
+			form_data.append("pic", pic)
+			form_data.append("contents", contents)
+			form_data.append("category", category)
+
+			$.ajax({
+				type: "POST",
+				url: "/upload",
+				data: form_data,
+				cache: false,
+				contentType: false,
+				processData: false,
+				success: function (response) {
+					alert(response["msg"])
+					window.location.href() // 완료되면 리스트 항목으로 연결
+				}
+			});
+		}
+	</script>
+</head>
+
+<body>
+	<div class="header">
+		<h1>게시글 작성</h1>
+	</div>
+	<div class="wrap">
+		<div class="jumbotron jumbotron-fluid main">
+			<div class="container">
+				<div class="posting-box">
+					<div class="form-group">
+						<input type="text" class="form-control" id="title" placeholder="게시물 제목">
+					</div>
+					<div class="custom-file">
+						<input type="file" onchange="setThumbnail(event)" class="custom-file-input" id="pic">
+						<label class="custom-file-label" for="pic">사진 선택</label>
+						<div id="thumbnailBox">
+							<img src="" id="thumbnail">
+						</div>
+					</div>
+					<div class="form-group">
+						<textarea class="form-control" id="contents" rows="5" placeholder="게시물 내용"></textarea>
+					</div>
+					<div class="button-box">
+						<button onclick="cancel()" type="button" class="btn btn-primary">취소</button>
+						<button onclick="posting('info')" type="button" class="btn btn-danger">완료</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
