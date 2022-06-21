@@ -1,0 +1,56 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+* {
+    font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+}
+
+.nvi_bar {
+    max-width: 100vw;
+    margin-left:1650px;
+
+    float: right;
+    padding-top: 5px;
+}
+
+body {
+    background-color: #91ea9d;
+    min-height: 100vh;
+    padding-top: 3.25rem;
+}
+
+.section {
+    padding: 1rem 1.5rem;
+    max-width: 750px;
+    margin: auto;
+}
+
+/*.nvi_bar.button {
+    color: green;
+}*/
+
+/*.button.nvi_bar {*/
+/*    background-color: #e8344e;*/
+/*    border-color: transparent;*/
+/*    color: #fff !important;*/
+/*}*/
+
+/*.button.nvi_bar.is-outlined {*/
+/*    background-color: transparent;*/
+/*    border-color: #e8344e;*/
+/*    color: #e8344e !important;*/
+/*}*/
+
+.modal-content {
+    width: 600px;
+    max-width: 80%;
+}
+
+input::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+.image img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
