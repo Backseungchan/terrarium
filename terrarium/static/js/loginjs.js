@@ -39,7 +39,7 @@ function sign_up() {
     let username = $("#input-username").val()
     let password = $("#input-password").val()
     let password2 = $("#input-password2").val()
-    let nickname = $("#input-nickname")
+    let nickname = $("#input-nickname").val()
     let birthyy = $("#birthyy").val()
     let birthmm = $("#birthmm").val()
     let birthdd = $("#birthdd").val()
