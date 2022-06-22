@@ -45,7 +45,7 @@ function setThumbnail(event) {
 
 // 취소 버튼
 function cancel() {
-  window.location.href("#");
+  history.back();
 }
 
 // 완료 버튼

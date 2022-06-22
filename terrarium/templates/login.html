@@ -1,230 +1,149 @@
 <!doctype html>
 <html lang="en">
+
 <head>
 
-    <!-- 웹페이지 타이틀 -->
-    <title>Log In | TERRARIUM</title>
+	<!-- 웹페이지 타이틀 -->
+	<title>Log In | TERRARIUM</title>
 
-    <!-- 메타 태그 -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- 메타 태그 -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon/favicon.ico') }}" type="image/x-icon">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    <meta property="og:title" content="🌿Terrarium - 테라리움">
-    <meta property="og:image" content="static/images/logo/og_image.jpg">
-    <meta property="og:description" content="잘 키운 반려식물 열 반려동물 안부럽다? 내가 키운 식물로 재테크 까지 모든 건 테라리움에서~">
+	<link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon/favicon.ico') }}" type="image/x-icon">
+	<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+	<meta property="og:title" content="🌿Terrarium - 테라리움">
+	<meta property="og:image" content="static/images/logo/og_image.jpg">
+	<meta property="og:description" content="잘 키운 반려식물 열 반려동물 안부럽다? 내가 키운 식물로 재테크 까지 모든 건 테라리움에서~">
 
-    <!-- Bulma CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+	<!-- Bulma CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 
-    <!-- Font Awesome CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+	<!-- Font Awesome CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 
-    <!-- Font Link -->
-    <link rel="stylesheet" as="style" crossorigin
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
-    <script src="https://kit.fontawesome.com/4b943b8f17.js" crossorigin="anonymous"></script>
+	<!-- Font Link -->
+	<link rel="stylesheet" as="style" crossorigin
+		href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+	<script src="https://kit.fontawesome.com/4b943b8f17.js" crossorigin="anonymous"></script>
 
-    <!-- JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+	<!-- JS -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
-    <!-- login CSS 링크 -->
-    <link rel="stylesheet" type="text/css" href="../static/css/logincss.css">
-
-    <script src="../static/js/loginjs.js"></script>
+	<!-- login CSS 링크 -->
+	<link rel="stylesheet" type="text/css" href="../static/css/logincss.css">
+	<script src="../static/js/loginjs.js"></script>
 </head>
 <body>
-<section class="hero is-white">
-    <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
+	<section class="hero is-white">
+		<div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
+			<div class="terralogo">
+				<img src="../static/images/logo/mainlogo.png">
+			</div>
+		</div>
+	</section>
+	<section class="section">
+		<div class="container">
+			<div class="box" style="max-width: 480px;margin:auto">
+				<article class="media">
+					<div class="media-content">
+						<div class="content">
+							<div class="field has-addons">
+								<div class="control has-icons-left" style="width:100%">
+									<input id="input-username" class="input" type="text" placeholder="아이디">
+									<span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+								</div>
+								<div id="btn-check-dup" class="control is-hidden">
+									<button class="button is-sparta" onclick="check_dup()">중복확인</button>
+								</div>
 
-        <div class="terralogo">
-            <img src="../static/images/logo/mainlogo.png">
-        </div>
-    </div>
-</section>
-<section class="section">
-    <div class="container">
-        <div class="box" style="max-width: 480px;margin:auto">
-            <article class="media">
-                <div class="media-content">
-                    <div class="content">
-                        <div class="field has-addons">
-                            <div class="control has-icons-left" style="width:100%">
-                                <input id="input-username" class="input" type="text" placeholder="아이디">
-                                <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
-                            </div>
-                            <div id="btn-check-dup" class="control is-hidden">
-                                <button class="button is-sparta" onclick="check_dup()">중복확인</button>
-                            </div>
-                    </div>
-                        <p id="help-id" class="help is-hidden">아이디는 2-10자의 영문과 숫자와 일부 특수문자(._-)만 입력 가능합니다.</p>
-                        <p id="help-id-login" class="help is-danger"></p>
+							</div>
+							<p id="help-id" class="help is-hidden">아이디는 2-10자의 영문과 숫자와 일부 특수문자(._-)만 입력 가능합니다.</p>
+							<p id="help-id-login" class="help is-danger"></p>
 
-                        <div class="field">
-                            <div class="control has-icons-left">
-                                <input id="input-password" class="input" type="password" placeholder="비밀번호">
-                                <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
-                                <p id="help-password" class="help is-hidden">영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요.
-                                    특수문자(!@#$%^&*)도 사용가능합니다.</p>
-                        </div>
-                        </div>
-                        <div id="div-sign-in-or-up" class="has-text-centered">
-                            <nav class="level is-mobile">
-                                <button class="level-item button is-sparta" onclick="sign_in()">
-                                    <i class="fa-solid fa-key"></i> &nbsp; 로그인
-                                </button>
-                            </nav>
-                            <hr>
-                            <h6 class="mb-3">아직 회원이 아니라면? &nbsp; <i class="fa-solid fa-hand-point-down"></i></h6>
-                            <nav class="level is-mobile">
+							<div class="field">
+								<div class="control has-icons-left">
+									<div class="main">
+										<input id="input-password" class="input" type="password" placeholder="비밀번호">
+										<span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+									</div>
+									<p id="help-password" class="help is-hidden">영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요.
+										특수문자(!@#$%^&*)도
+										사용가능합니다.</p>
+								</div>
+							</div>
+							<div id="div-sign-in-or-up" class="has-text-centered">
+								<nav class="level is-mobile">
+									<button class="level-item button is-sparta" onclick="sign_in()">
+										<i class="fa-solid fa-key"></i> &nbsp; 로그인
+									</button>
+								</nav>
+								<hr>
+								<h6 class="mb-3">아직 회원이 아니라면? &nbsp; <i class="fa-solid fa-hand-point-down"></i></h6>
+								<nav class="level is-mobile">
+									<button class="level-item button is-sparta is-outlined" onclick="toggle_sign_up()">
+										회원가입하기
+									</button>
+								</nav>
+							</div>
+							<div id="sign-up-box" class="is-hidden">
+								<div class="mb-5">
+									<div class="field">
+										<div class="control has-icons-left" style="width:100%">
+											<input id="input-password2" class="input" type="password"
+												placeholder="비밀번호 재입력">
+											<span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+										</div>
+										<p id="help-password2" class="help is-hidden">비밀번호를 다시 한 번 입력해주세요.</p>
+										<div class="control has-icons-left" style="width:100%">
+											<input id="input-nickname" class="input" type="text" placeholder="닉네임">
+											<span class="icon is-small is-left"><i class="fa-solid fa-pen"></i></span>
+										</div>
+										<p id="help-nickname" class="help is-hidden">닉네임을 입력해주세요.</p>
+										<div class="select" id="yy">
+											<select id="birthyy">
+												<option value="none">---출생연도---</option>
+												{% for x in range(1974,2023) %}
+												<option value="{{ x }}">{{ x }}</option>
+												{% endfor %}
+											</select>
+										</div>
+										<div class="select" id="mm">
+											<select id="birthmm">
+												<option value="none">---월---</option>
+												{% for x in range(1,13) %}
+												<option value="{{ x }}">{{ x }}</option>
+												{% endfor %}
+											</select>
+										</div>
+										<div class="select" id="dd">
+											<select id="birthdd">
+												<option value="none">---일---</option>
+												{% for x in range(1,32) %}
+												<option value="{{ x }}">{{ x }}</option>
+												{% endfor %}
+											</select>
+										</div>
+										<p id="help-yymmdd" class="help is-hidden">출생월일을 선택해 주세요.</p>
+									</div>
+								</div>
+								<nav class="level is-mobile">
+									<button class="level-item button is-sparta" onclick="sign_up()">
+										회원가입
+									</button>
+									<button class="level-item button is-sparta is-outlined" onclick="toggle_sign_up()">
+										취소
+									</button>
+								</nav>
+							</div>
+						</div>
+				</article>
+			</div>
 
-                                <button class="level-item button is-sparta is-outlined"
-                                        onclick="toggle_sign_up()">
-                                    회원가입하기
-                                </button>
-                            </nav>
-                        </div>
-                        <div id="sign-up-box" class="is-hidden">
-                            <div class="mb-5">
-                                <div class="field">
-                                    <div class="control has-icons-left" style="width:100%">
-                                        <input id="input-password2" class="input" type="password"
-                                               placeholder="비밀번호 재입력">
-                                        <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
-                                    </div>
-                                    <p id="help-password2" class="help is-hidden">비밀번호를 다시 한 번 입력해주세요.</p>
-                                    <div class="control has-icons-left" style="width:100%">
-                                        <input id="input-nickname" class="input" type="text"
-                                               placeholder="닉네임">
-                                        <span class="icon is-small is-left"><i class="fa-solid fa-pen"></i></span>
-                                    </div>
-                                    <p id="help-nickname" class="help is-hidden">닉네임을 입력해주세요.</p>
-                                    <div class="select" id="yy">
-                                        <select id="birthyy">
-                                            <option value="none">---출생연도---</option>
-                                            <option value="1974">1974</option>
-                                            <option value="1975">1975</option>
-                                            <option value="1976">1976</option>
-                                            <option value="1977">1977</option>
-                                            <option value="1978">1978</option>
-                                            <option value="1979">1979</option>
-                                            <option value="1980">1980</option>
-                                            <option value="1981">1981</option>
-                                            <option value="1982">1982</option>
-                                            <option value="1983">1983</option>
-                                            <option value="1984">1984</option>
-                                            <option value="1985">1985</option>
-                                            <option value="1986">1986</option>
-                                            <option value="1987">1987</option>
-                                            <option value="1988">1988</option>
-                                            <option value="1989">1989</option>
-                                            <option value="1990">1990</option>
-                                            <option value="1991">1991</option>
-                                            <option value="1992">1992</option>
-                                            <option value="1993">1993</option>
-                                            <option value="1994">1994</option>
-                                            <option value="1995">1995</option>
-                                            <option value="1996">1996</option>
-                                            <option value="1997">1997</option>
-                                            <option value="1998">1998</option>
-                                            <option value="1999">1999</option>
-                                            <option value="2000">2000</option>
-                                            <option value="2001">2001</option>
-                                            <option value="2002">2002</option>
-                                            <option value="2003">2003</option>
-                                            <option value="2004">2004</option>
-                                            <option value="2005">2005</option>
-                                            <option value="2008">2006</option>
-                                            <option value="2007">2007</option>
-                                            <option value="2008">2008</option>
-                                            <option value="2009">2009</option>
-                                            <option value="2010">2010</option>
-                                            <option value="2011">2011</option>
-                                            <option value="2012">2012</option>
-                                            <option value="2013">2013</option>
-                                            <option value="2014">2014</option>
-                                            <option value="2015">2015</option>
-                                            <option value="2016">2016</option>
-                                            <option value="2017">2017</option>
-                                            <option value="2018">2018</option>
-                                            <option value="2019">2019</option>
-                                            <option value="2020">2020</option>
-                                            <option value="2021">2021</option>
-                                            <option value="2022">2022</option>
-                                        </select>
-                                    </div>
-                                    <div class="select" id="mm">
-                                        <select id="birthmm">
-                                            <option value="none">---월---</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7">7</option>
-                                            <option value="8">8</option>
-                                            <option value="9">9</option>
-                                            <option value="10">10</option>
-                                            <option value="11">11</option>
-                                            <option value="12">12</option>
-                                        </select>
-                                    </div>
-                                    <div class="select" id="dd">
-                                        <select id="birthdd">
-                                            <option value="none">---일---</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                            <option value="6">6</option>
-                                            <option value="7">7</option>
-                                            <option value="8">8</option>
-                                            <option value="9">9</option>
-                                            <option value="10">10</option>
-                                            <option value="11">11</option>
-                                            <option value="12">12</option>
-                                            <option value="13">13</option>
-                                            <option value="14">14</option>
-                                            <option value="15">15</option>
-                                            <option value="16">16</option>
-                                            <option value="17">17</option>
-                                            <option value="18">18</option>
-                                            <option value="19">19</option>
-                                            <option value="20">20</option>
-                                            <option value="21">21</option>
-                                            <option value="22">22</option>
-                                            <option value="23">23</option>
-                                            <option value="24">24</option>
-                                            <option value="25">25</option>
-                                            <option value="26">26</option>
-                                            <option value="27">27</option>
-                                            <option value="28">28</option>
-                                            <option value="29">29</option>
-                                            <option value="30">30</option>
-                                            <option value="31">31</option>
-                                        </select>
-                                    </div>
-                                    <p id="help-yymmdd" class="help is-hidden">출생월일을 선택해 주세요.</p>
-                                </div>
-                            </div>
-                            <nav class="level is-mobile">
-                                <button class="level-item button is-sparta" onclick="sign_up()">
-                                    회원가입
-                                </button>
-                                <button class="level-item button is-sparta is-outlined" onclick="toggle_sign_up()">
-                                    취소
-                                </button>
-                            </nav>
-                        </div>
-                    </div>
-            </article>
-        </div>
-    </div>
-</section>
+		</div>
+	</section>
 </body>
+
 </html>
