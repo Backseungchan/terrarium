@@ -74,7 +74,7 @@ def sign_in():
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
 
-        return jsonify({'result': 'success', 'token': token})
+        return jsonify({'result': 'success', 'token': token, 'uid':uid_receive})
 
     else:
         return jsonify({'result': 'fail', 'msg': '존재하지 않는 아이디거나 비밀번호가 일치하지 않습니다.'})
@@ -113,8 +113,8 @@ def check_dup():
 # 게시판 C,U
 @app.route('/uploadpage')
 def load_uploadPage():
-    return render_template("uploadpage.html", uid='bsc', category="info")
-
+    category_dict = request.args.to_dict()
+    return render_template("uploadpage.html",category = category_dict["category"])
 
 @app.route('/updatepage')
 def load_updatePage():
@@ -190,8 +190,11 @@ def fix_post():
 # 목록 전체 조회
 @app.route('/list/<category>')
 def show_list(category):
+    uid_dict = request.args.to_dict()
+    print("hello")
+    print(type(uid_dict["uid"]))
     category_posts = list(db.post.find({'category': category}, {'_id': False, 'category': False}))
-    return render_template("list.html", category=category, posts=category_posts, uid='bsc')
+    return render_template("list.html", category=category, posts=category_posts, uid=uid_dict["uid"])
 
 
 # 마이페이지

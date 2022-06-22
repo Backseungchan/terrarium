@@ -1,4 +1,5 @@
 function sign_in() {
+<<<<<<< HEAD
     let uid = $("#input-uid").val()
     let password = $("#input-password").val()
     let is_quit = 0
@@ -46,8 +47,62 @@ function sign_up() {
     let birthdd = $("#birthdd").val()
     let is_quit = 0
     console.log(uid, password, password2, nickname, birthyy, birthmm, birthdd, is_quit)
+=======
+  let uid = $("#input-uid").val();
+  let password = $("#input-password").val();
 
+  if (uid == "") {
+    $("#help-id-login").text("아이디를 입력해주세요.");
+    $("#input-uid").focus();
+    return;
+  } else {
+    $("#help-id-login").text("");
+  }
+  if (password == "") {
+    $("#help-password-login").text("비밀번호를 입력해주세요.");
+    $("#input-password").focus();
+    return;
+  } else {
+    $("#help-password-login").text("");
+  }
+  $.ajax({
+    type: "POST",
+    url: "/sign_in",
+    data: {
+      uid_give: uid,
+      password_give: password,
+    },
+    success: function (response) {
+      if (response["result"] == "success") {
+        $.cookie("mytoken", response["token"], { path: "/" });
+        window.location.replace("/?uid=" + response["uid"]);
+      } else {
+        alert(response["msg"]);
+      }
+    },
+  });
+}
 
+function sign_up() {
+  let uid = $("#input-uid").val();
+  let password = $("#input-password").val();
+  let password2 = $("#input-password2").val();
+  let nickname = $("#input-nickname").val();
+  let birthyy = $("#birthyy").val();
+  let birthmm = $("#birthmm").val();
+  let birthdd = $("#birthdd").val();
+  console.log(uid, password, password2, nickname, birthyy, birthmm, birthdd);
+>>>>>>> 20cf8a64ce011aa97188328f12414c875d98678a
+
+  if ($("#help-id").hasClass("is-danger")) {
+    alert("아이디를 다시 확인해주세요.");
+    return;
+  } else if (!$("#help-id").hasClass("is-success")) {
+    alert("아이디 중복확인을 해주세요.");
+    return;
+  }
+
+<<<<<<< HEAD
     if ($("#help-id").hasClass("is-danger")) {
         alert("아이디를 다시 확인해주세요.")
         return;
@@ -120,21 +175,118 @@ function sign_up() {
 
         }
     });
+=======
+  if (password == "") {
+    $("#help-password")
+      .text("비밀번호를 입력해주세요.")
+      .removeClass("is-safe")
+      .addClass("is-danger");
+    $("#input-password").focus();
+    return;
+  } else if (!is_password(password)) {
+    $("#help-password")
+      .text(
+        "비밀번호의 형식을 확인해주세요. 영문과 숫자 필수 포함, 특수문자(!@#$%^&*) 사용가능 8-20자"
+      )
+      .removeClass("is-safe")
+      .addClass("is-danger");
+    $("#input-password").focus();
+    return;
+  } else {
+    $("#help-password")
+      .text("사용할 수 있는 비밀번호입니다.")
+      .removeClass("is-danger")
+      .addClass("is-success");
+  }
+  if (password2 == "") {
+    $("#help-password2")
+      .text("비밀번호를 입력해주세요.")
+      .removeClass("is-safe")
+      .addClass("is-danger");
+    $("#input-password2").focus();
+    return;
+  } else if (password2 != password) {
+    $("#help-password2")
+      .text("비밀번호가 일치하지 않습니다.")
+      .removeClass("is-safe")
+      .addClass("is-danger");
+    $("#input-password2").focus();
+    return;
+  } else {
+    $("#help-password2")
+      .text("비밀번호가 일치합니다.")
+      .removeClass("is-danger")
+      .addClass("is-success");
+  }
+  if (nickname == "none") {
+    $("#help-nickname")
+      .text("닉네임을 입력해주세요.")
+      .removeClass("is-safe")
+      .addClass("is-danger");
+    $("#input-nickname").focus();
+    return;
+  }
+  if (birthyy == "none") {
+    $("#help-yymmdd")
+      .text("출생연도를 선택해주세요.")
+      .removeClass("is-safe")
+      .addClass("is-danger");
+    $("#birthyy").focus();
+    return;
+  }
+  if (birthmm == "none") {
+    $("#help-yymmdd")
+      .text("출생월을 선택해주세요.")
+      .removeClass("is-safe")
+      .addClass("is-danger");
+    $("#birthmm").focus();
+    return;
+  }
+  if (birthdd == "none") {
+    $("#help-yymmdd")
+      .text("출생일을 선택해주세요.")
+      .removeClass("is-safe")
+      .addClass("is-danger");
+    $("#birthdd").focus();
+    return;
+  } else {
+    $("#help-yymmdd")
+      .text("생년월일을 선택하였습니다.")
+      .removeClass("is-danger")
+      .addClass("is-success");
+  }
+>>>>>>> 20cf8a64ce011aa97188328f12414c875d98678a
 
+  $.ajax({
+    type: "POST",
+    url: "/sign_up/save",
+    data: {
+      uid_give: uid,
+      password_give: password,
+      nickname_give: nickname,
+      birthyy_give: birthyy,
+      birthmm_give: birthmm,
+      birthdd_give: birthdd,
+    },
+    success: function (response) {
+      alert("회원가입을 축하드립니다!");
+      window.location.replace("/login");
+    },
+  });
 }
 
 function toggle_sign_up() {
-    $("#sign-up-box").toggleClass("is-hidden")
-    $("#div-sign-in-or-up").toggleClass("is-hidden")
-    $("#btn-check-dup").toggleClass("is-hidden")
-    $("#help-id").toggleClass("is-hidden")
-    $("#help-password").toggleClass("is-hidden")
-    $("#help-password2").toggleClass("is-hidden")
-    $("#help-nickname").toggleClass("is-hidden")
-    $("#help-yymmdd").toggleClass("is-hidden")
-    $("#help-yy").toggleClass("is-hidden")
-    $("#help-mm").toggleClass("is-hidden")
-    $("#help-dd").toggleClass("is-hidden")
+  $("#sign-up-box").toggleClass("is-hidden");
+  $("#div-sign-in-or-up").toggleClass("is-hidden");
+  $("#btn-check-dup").toggleClass("is-hidden");
+  $("#help-id").toggleClass("is-hidden");
+  $("#help-password").toggleClass("is-hidden");
+  $("#help-password2").toggleClass("is-hidden");
+  $("#help-nickname").toggleClass("is-hidden");
+  $("#help-yymmdd").toggleClass("is-hidden");
+  $("#help-yy").toggleClass("is-hidden");
+  $("#help-mm").toggleClass("is-hidden");
+  $("#help-dd").toggleClass("is-hidden");
 }
 
 function is_nickname(asValue) {
@@ -148,33 +300,47 @@ function is_password(asValue) {
 }
 
 function check_dup() {
-    let uid = $("#input-uid").val()
-    console.log(uid)
-    if (uid == "") {
-        $("#help-id").text("아이디를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
-        $("#input-uid").focus()
-        return;
-    }
-    if (!is_nickname(uid)) {
-        $("#help-id").text("아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-10자 길이").removeClass("is-safe").addClass("is-danger")
-        $("#input-uid").focus()
-        return;
-    }
-    $("#help-id").addClass("is-loading")
-    $.ajax({
-        type: "POST",
-        url: "/sign_up/check_dup",
-        data: {
-            uid_give: uid
-        },
-        success: function (response) {
-            if (response["exists"]) {
-                $("#help-id").text("이미 존재하는 아이디입니다.").removeClass("is-safe").addClass("is-danger")
-                $("#input-uid").focus()
-            } else {
-                $("#help-id").text("사용할 수 있는 아이디입니다.").removeClass("is-danger").addClass("is-success")
-            }
-            $("#help-id").removeClass("is-loading")
-        }
-    });
+  let uid = $("#input-uid").val();
+  console.log(uid);
+  if (uid == "") {
+    $("#help-id")
+      .text("아이디를 입력해주세요.")
+      .removeClass("is-safe")
+      .addClass("is-danger");
+    $("#input-uid").focus();
+    return;
+  }
+  if (!is_nickname(uid)) {
+    $("#help-id")
+      .text(
+        "아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-10자 길이"
+      )
+      .removeClass("is-safe")
+      .addClass("is-danger");
+    $("#input-uid").focus();
+    return;
+  }
+  $("#help-id").addClass("is-loading");
+  $.ajax({
+    type: "POST",
+    url: "/sign_up/check_dup",
+    data: {
+      uid_give: uid,
+    },
+    success: function (response) {
+      if (response["exists"]) {
+        $("#help-id")
+          .text("이미 존재하는 아이디입니다.")
+          .removeClass("is-safe")
+          .addClass("is-danger");
+        $("#input-uid").focus();
+      } else {
+        $("#help-id")
+          .text("사용할 수 있는 아이디입니다.")
+          .removeClass("is-danger")
+          .addClass("is-success");
+      }
+      $("#help-id").removeClass("is-loading");
+    },
+  });
 }

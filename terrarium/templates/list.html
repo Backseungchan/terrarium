@@ -28,7 +28,15 @@
 	<div class="container d-flex flex-nowrap">
 		<div class="right-box">
 			<div class="content-box">
-				<h3>{{'식물정보' if category == 'info' else '식테크' if category == 'tech' else '식물자랑'}} 게시글</h3>
+				<div class="header-box">
+					<h3>{{'식물정보' if category == 'info' else '식테크' if category == 'tech' else '식물자랑'}} 게시글</h3>
+					<nav class="nav-box">
+						<button type="button" class="btn btn-success" onclick="goBack('{{uid}}')">뒤로가기</button>
+						<button type="button" class="btn btn-success"
+							onclick="uploadButton('{{category}}','{{uid}}')">작성하기</button>
+						<button type="button" class="btn btn-success" onclick="myPage('{{uid}}')">마이페이지</button>
+					</nav>
+				</div>
 				<div class="divider"></div>
 				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 					{% for post in posts %}
@@ -39,7 +47,7 @@
 							</div>
 
 							<div class="card-body">
-								<h4>{{ post.title }}</h4>
+								<h4>{{ '제목없음' if post.title == "" else post.title }}</h4>
 								<p class="card-text">{{ '내용없음' if post.contents == "" else post.contents
 									}}</p>
 								<div class="d-flex justify-content-between align-items-center">
@@ -47,33 +55,14 @@
 										<button type="button" class="btn btn-sm btn-outline-secondary">바로가기</button>
 										{% if post.uid == uid %}
 										<button type="button" class="btn btn-sm btn-outline-secondary"
-											onclick="updateButton({{post.postnum}},'{{category}}')">수정하기</button>
-										{% endif %}	
+											onclick="updateButton({{post.postnum}},'{{category}}','{{post.uid}}')">수정하기</button>
+										{% endif %}
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					{% endfor %}
-				</div>
-				<div class="navigation-box">
-					<nav aria-label="Page navigation example">
-						<ul class="pagination">
-							<li class="page-item">
-								<a class="page-link" href="#" aria-label="Previous">
-									<span aria-hidden="true">&laquo;</span>
-								</a>
-							</li>
-							<li class="page-item"><a class="page-link" href="#">1</a></li>
-							<li class="page-item"><a class="page-link" href="#">2</a></li>
-							<li class="page-item"><a class="page-link" href="#">3</a></li>
-							<li class="page-item">
-								<a class="page-link" href="#" aria-label="Next">
-									<span aria-hidden="true">&raquo;</span>
-								</a>
-							</li>
-						</ul>
-					</nav>
 				</div>
 			</div>
 		</div>

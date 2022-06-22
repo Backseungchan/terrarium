@@ -18,7 +18,10 @@ function cancel() {
 }
 
 // 완료 버튼
-function posting(uid, category) {
+function posting(category) {
+  const URLSearch = new URLSearchParams(location.search);
+  let uid = URLSearch.get("uid");
+
   let title = $("#title").val();
   let pic = $("#pic")[0].files[0];
   let contents = $("#contents").val();
@@ -39,7 +42,7 @@ function posting(uid, category) {
     processData: false,
     success: function (response) {
       alert(response["msg"]);
-      location.href = "./list/" + category; // 완료되면 리스트 항목으로 연결
+      location.href = "./list/" + category + "?uid=" + uid; // 완료되면 리스트 항목으로 연결
     },
   });
 }

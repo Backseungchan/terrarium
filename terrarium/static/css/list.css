@@ -45,6 +45,11 @@
 	height: 0;
 }
 
+.header-box {
+	display: flex;
+	justify-content: space-between;
+}
+
 /*회색 가로 구분선*/
 .divider {
 	height: 1px;

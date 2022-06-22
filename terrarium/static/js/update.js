@@ -53,6 +53,7 @@ function fixing() {
   const URLSearch = new URLSearchParams(location.search);
   const category = URLSearch.get("category");
   const postnum = URLSearch.get("postnum");
+  const uid = URLSearch.get("uid");
 
   let title = $("#title").val();
   let contents = $("#contents").val();
@@ -77,7 +78,7 @@ function fixing() {
     processData: false,
     success: async function (response) {
       alert(response["msg"]);
-      location.href = "../list/" + category;
+      location.href = "../list/" + category + "?uid=" + uid;
     },
   });
 }
