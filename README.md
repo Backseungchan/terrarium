@@ -23,5 +23,3 @@
 ![api](https://user-images.githubusercontent.com/103014298/174975346-b2a6452a-7c8e-470d-a5c6-6f6370dcda8e.jpg)
 
 
-profile
-안철호
