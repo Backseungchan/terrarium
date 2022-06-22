@@ -1,7 +1,7 @@
+from unicodedata import category
 import certifi
+import json
 from pymongo import MongoClient
-
-ca = certifi.where()
 import jwt
 import datetime
 import hashlib
@@ -14,11 +14,23 @@ app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
-SECRET_KEY = 'SPARTA'
-
-client = MongoClient('mongodb+srv://test:sparta@cluster0.ihwyd.mongodb.net/Cluster0?retryWrites=true&w=majority')
+ca = certifi.where()  # mongodb 보안 문제로 추가
+#승찬님 DB	
+# client = MongoClient(
+#     'mongodb+srv://test:sparta@cluster0.m0wkc.mongodb.net/Cluster0?retryWrites=true&w=majority', tlsCAFile=ca)
+# db = client.dbsparta
+#희정님 DB
+# client = MongoClient('mongodb+srv://test:sparta@cluster0.cdgld5e.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
+# db = client.terrarium
+#철호님 DB
+client = MongoClient('mongodb+srv://test:sparta@cluster0.ihwyd.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
 db = client.dbsparta
 
+<<<<<<< HEAD
+=======
+SECRET_KEY = 'SPARTA'
+
+>>>>>>> 4975716b4927df27520d988481e30f216d6108fe
 @app.route('/')
 def home():
     token_receive = request.cookies.get('mytoken')
@@ -93,7 +105,85 @@ def check_dup():
     exists = bool(db.users.find_one({"uid": uid_receive}))
     return jsonify({'result': 'success', 'exists': exists})
 
+# 게시판 C,U
+@app.route('/uploadpage')
+def load_uploadPage():
+    return render_template("uploadpage.html",uid = 'bsc',category = "info")
 
+@app.route('/updatepage')
+def load_updatePage():
+    return render_template("updatepage.html",uid='bsc')
+
+@app.route("/detail", methods=["GET"])
+def get_post():
+    postnum_dict = request.args.to_dict() #postnum을 dict형태로 가져옴
+	#postnum과 일치하는 post를 db에서 가져옴
+    post = list(db.post.find({'postnum': int(postnum_dict["postnum"])}, {'_id': False,}))
+    return jsonify({'post': post})
+
+@app.route('/upload', methods=['POST'])
+def save_post():
+    uid = request.form['uid']
+    title = request.form['title']
+    contents = request.form['contents']
+    category = request.form['category']
+    try:
+        pic = request.files["pic"]
+        filename,extension = pic.filename.split('.')  # 파일의 이름, 확장자
+        save_to = f'static/pic/'+pic.filename  # 파일 저장 경로 설정
+        pic.save(save_to)  # 파일 저장
+    except:
+        pic = None
+
+    post_list = list(db.post.find({}, {'_id' : False}))
+    postnum = len(post_list) + 1
+    doc = {
+        'uid':uid,
+		'postnum':postnum,
+		'category':category,
+        'title': title,
+        'contents': contents,
+    }
+
+    if pic != None:
+        doc['pic'] = f'{filename}.{extension}'
+    db.post.insert_one(doc)
+
+    return jsonify({'msg': "저장 성공"})
+
+@app.route('/update', methods=['POST'])
+def fix_post():
+    postnum = request.form['postnum']
+    title = request.form['title']
+    contents = request.form['contents']
+    try:	
+        pic = request.files["pic"]
+        filename,extension = pic.filename.split('.')  # 파일의 이름, 확장자
+        save_to = f'static/pic/'+pic.filename  # 파일 저장 경로 설정
+        pic.save(save_to)  # 파일 저장
+    except:
+        pic = None
+
+    doc = {
+        'title': title,
+        'contents': contents,
+    }
+
+    if pic != None:
+        doc['pic'] = f'{filename}.{extension}'
+        
+    print(doc)
+    db.post.update_one({'postnum':int(postnum)}, {'$set':doc})
+
+    return jsonify({'msg': "수정 성공"})
+
+#목록 전체 조회
+@app.route('/list/<category>')
+def show_list(category):
+    category_posts = list(db.post.find({'category': category}, {'_id': False,'category':False}))
+    return render_template("list.html", category=category, posts=category_posts, uid='bsc')
+
+#마이페이지
 @app.route('/mypage')
 def mypage_pw():
     return render_template("mypage.html", page="mypage_pwconfirm")

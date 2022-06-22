@@ -1,35 +1,37 @@
 <!doctype html>
 <html lang="en">
+
 <head>
 
-    <!-- Webpage Title -->
-    <title>Home | TERRARIUM</title>
+	<!-- Webpage Title -->
+	<title>Home | TERRARIUM</title>
 
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon/favicon.ico') }}" type="image/x-icon">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    <meta property="og:title" content="🌿Terrarium - 테라리움">
-    <meta property="og:image" content="static/images/logo/og_image.jpg">
-    <meta property="og:description" content="잘 키운 반려식물 열 반려동물 안부럽다? 내가 키운 식물로 재테크 까지 모든 건 테라리움에서~">
+	<link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon/favicon.ico') }}" type="image/x-icon">
+	<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+	<meta property="og:title" content="🌿Terrarium - 테라리움">
+	<meta property="og:image" content="static/images/logo/og_image.jpg">
+	<meta property="og:description" content="잘 키운 반려식물 열 반려동물 안부럽다? 내가 키운 식물로 재테크 까지 모든 건 테라리움에서~">
 
-    <!-- Bulma CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-    <!-- Font Awesome CSS -->
-    <link rel="stylesheet" as="style" crossorigin
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/logincss.css') }}" rel="stylesheet">
-    <!-- JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+	<!-- Bulma CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+	<!-- Font Awesome CSS -->
+	<link rel="stylesheet" as="style" crossorigin
+		href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="{{ url_for('static', filename='css/logincss.css') }}" rel="stylesheet">
+	<!-- JS -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
-    <!-- login CSS 링크 -->
-    <link rel="stylesheet" type="text/css" href="../static/css/indexcss.css">
+	<!-- login CSS 링크 -->
+	<link rel="stylesheet" type="text/css" href="../static/css/indexcss.css">
 
 
+<<<<<<< HEAD
     <script>
         function sign_out() {
             $.removeCookie('mytoken', {path: '/'});
@@ -108,5 +110,36 @@
             </div>
         </a>
 </div>
+=======
+	<script>
+		function sign_out() {
+			$.removeCookie('mytoken', { path: '/' });
+			alert('로그아웃!')
+			window.location.href = "login"
+		}
+	</script>
+
+</head>
+
+<body>
+	<nav class="navbar is-fixed-top is-white" role="navigation" aria-label="main navigation">
+		<div class="navbar-brand">
+			<a class="navbar-item" href="/">
+				<img src="{{ url_for('static', filename='images/logo/logo.png') }}">
+				<strong style="font-family: 'pretendard', sans-serif;font-size: larger;">TERRIUM</strong>
+			</a>
+		</div>
+
+		<section class="nvi_bar">
+			<div class="container">
+				<h2 class="subtitle">
+					<button onclick="sign_out()" class="button is-success is-outlined" id="posting-btn">Logout</button>
+				</h2>
+			</div>
+		</section>
+	</nav>
+
+>>>>>>> 4975716b4927df27520d988481e30f216d6108fe
 </body>
+
 </html>
