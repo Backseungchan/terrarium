@@ -1,7 +1,7 @@
 function sign_in() {
 
-    let username = $("#input-username").val()
-    let password = $("#input-password").val()
+    /*let username = $("#input-username").val()
+    let password = $("#input-password").val()*/
 
     if (username == "") {
         $("#help-id-login").text("아이디를 입력해주세요.")
@@ -10,7 +10,6 @@ function sign_in() {
     } else {
         $("#help-id-login").text("")
     }
-
     if (password == "") {
         $("#help-password-login").text("비밀번호를 입력해주세요.")
         $("#input-password").focus()
@@ -37,8 +36,8 @@ function sign_in() {
 }
 
 function sign_up() {
-    $("#input-username").val("")
-    $("#input-password").val("")
+    /*$("#input-username").val("")
+    $("#input-password").val("")*/
 
 
     let username = $("#input-username").val()
@@ -125,9 +124,8 @@ function sign_up() {
 }
 
 function toggle_sign_up() {
-    $("#input-username").val("")
-    $("#input-password").val("")
-
+    /*$("#input-username").val("")
+    $("#input-password").val("")*/
 
     $("#sign-up-box").toggleClass("is-hidden")
     $("#div-sign-in-or-up").toggleClass("is-hidden")
@@ -141,21 +139,6 @@ function toggle_sign_up() {
     $("#help-mm").toggleClass("is-hidden")
     $("#help-dd").toggleClass("is-hidden")
 }
-
-$(document).ready(function(){
-    $('.main i').on('click',function(){
-        $('input').toggleClass('active');
-        if($('input').hasClass('active')){
-            $(this).attr('class',"fa fa-eye-slash fa-lg")
-            .prev('input').attr('type',"text");
-        }else{
-            $(this).attr('class',"fa fa-eye fa-lg")
-            .prev('input').attr('type','password');
-        }
-    });
-});
-
-
 
 function is_nickname(asValue) {
     var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;

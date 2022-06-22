@@ -3,6 +3,10 @@
 * {
     font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
 }
+body {
+    background-color: white;
+    min-height: 100vh;
+}
 
 .terralogo {
     padding: 60px 0px 40px 0px;
@@ -10,11 +14,15 @@
     max-height: 300px;
 }
 
-body {
+/*.box {
 
-    background-color: white;
-    min-height: 100vh;
-}
+     background-image: url("https://i.pinimg.com/564x/84/a4/4d/84a44dfd6e18a3e2133808329230bb23.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0px;
+
+}*/
+
 
 .section {
     padding: 1rem 1.5rem;
