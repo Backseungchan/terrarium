@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from static.sampledata import posts
 import certifi
 from pymongo import MongoClient
+import jwt
 
 app = Flask(__name__)
 
@@ -9,6 +10,8 @@ ca = certifi.where()
 client = MongoClient('mongodb+srv://test:sparta@cluster0.cdgld5e.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
 # client = MongoClient('mongodb+srv://test:sparta@cluster0.ihwyd.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
 db = client.terrarium
+
+SECRET_KEY = 'SPARTA'
 
 # TODO: 모든 목록 페이지에 대해 페이지네이션을 위해 데이터 끊기가 필요함.
 # TODO: imhjnoh가 작성한 내용에서 댓글의 경우 유저아이디를 uid, 포스트의 경우 ID 로 작업했기 때문에 통일 필요.
@@ -30,8 +33,11 @@ def mypage_pw():
 
 @app.route('/mypage/<page>')
 def mypage(page):
+    username = "asd"
     uid = 17
-    data = {}
+    data = db.users.find_one({"username":username}, {"_id":False})
+
+    # 홈일 경우 최근 작성한 게시글 3개와 최근 작성한 댓글 3개
     if page == "home":
         recent_posts = list(db.posts.find({"ID": uid}, {"_id":False}).limit(3))
         data["recent_posts"] = recent_posts
@@ -42,9 +48,11 @@ def mypage(page):
             {"$limit": 3}
         ]))
         data["recent_replies"] = recent_replies
+    # 작성한 게시글
     elif page == "posts":
         posts = list(db.posts.find({"ID": uid}, {"_id": False}))
         data["posts"] = posts
+    # 작성한 댓글
     elif page == "replies":
         # replies = list(db.posts.find({"replies": {"$elemMatch": {"uid": uid}}}))
         replies = list(db.posts.aggregate([
@@ -55,7 +63,25 @@ def mypage(page):
         data["replies"] = replies
 
     print(data)
-    return render_template("mypage.html", page=page, data=data)
+    return render_template("mypage.html", page=page, data=data, uid=str(username))
+
+# 회원 탈퇴 기능
+@app.route('/quit', methods=["POST"])
+def quit():
+    uid = request.form["id_give"]
+    # 유저 데이터에 is_quit 인자를 추가해서 soft delete.
+    # TODO: 로그인 기능에서도 is_quit 인자가 있는지, 변수가 1인지 검사하고 로그인 통과시켜야 합니다.
+    db.users.update_one({"username":uid}, {"$set": {"is_quit": 1}})
+    return jsonify({"status":"success"})
+
+# 비밀번호 변경 기능
+@app.route('/mypage/pwchange', methods=["POST"])
+def pwchange():
+    uid = request.form["id_give"]
+    pw = request.form["password_give"]
+    # password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    db.users.update_one({"username": uid}, {"$set": {"password": pw}})
+    return jsonify({"status":"success"})
 
 @app.route('/reply_sample')
 def reply_sample():
