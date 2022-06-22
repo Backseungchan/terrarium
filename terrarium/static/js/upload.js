@@ -18,13 +18,13 @@ function cancel() {
 }
 
 // 완료 버튼
-function posting(userid, category) {
+function posting(uid, category) {
   let title = $("#title").val();
   let pic = $("#pic")[0].files[0];
   let contents = $("#contents").val();
 
   let form_data = new FormData();
-  form_data.append("userid", userid);
+  form_data.append("uid", uid);
   form_data.append("title", title);
   form_data.append("pic", pic);
   form_data.append("contents", contents);

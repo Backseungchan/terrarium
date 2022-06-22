@@ -100,11 +100,11 @@ def check_dup():
 # 게시판 C,U
 @app.route('/uploadpage')
 def load_uploadPage():
-    return render_template("uploadpage.html",userid = 'bsc',category = "info")
+    return render_template("uploadpage.html",uid = 'bsc',category = "info")
 
 @app.route('/updatepage')
 def load_updatePage():
-    return render_template("updatepage.html",userid='bsc')
+    return render_template("updatepage.html",uid='bsc')
 
 @app.route("/detail", methods=["GET"])
 def get_post():
@@ -115,7 +115,7 @@ def get_post():
 
 @app.route('/upload', methods=['POST'])
 def save_post():
-    userid = request.form['userid']
+    uid = request.form['uid']
     title = request.form['title']
     contents = request.form['contents']
     category = request.form['category']
@@ -130,7 +130,7 @@ def save_post():
     post_list = list(db.post.find({}, {'_id' : False}))
     postnum = len(post_list) + 1
     doc = {
-        'userid':userid,
+        'uid':uid,
 		'postnum':postnum,
 		'category':category,
         'title': title,
@@ -173,7 +173,7 @@ def fix_post():
 @app.route('/list/<category>')
 def show_list(category):
     category_posts = list(db.post.find({'category': category}, {'_id': False,'category':False}))
-    return render_template("list.html", category=category, posts=category_posts, userid='bsc')
+    return render_template("list.html", category=category, posts=category_posts, uid='bsc')
 
 #마이페이지
 @app.route('/mypage')

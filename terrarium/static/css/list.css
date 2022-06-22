@@ -60,6 +60,10 @@
 	height: 100%;
 }
 
+.edit-button {
+	visibility: hidden;
+}
+
 /*페이지네이션 컨테이너*/
 .navigation-box {
 	margin-top: 50px;
