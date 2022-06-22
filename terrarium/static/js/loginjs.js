@@ -1,7 +1,7 @@
 function sign_in() {
     let uid = $("#input-uid").val()
     let password = $("#input-password").val()
-
+    let is_quit = 0
 
     if (uid == "") {
         $("#help-id-login").text("아이디를 입력해주세요.")
@@ -22,7 +22,8 @@ function sign_in() {
         url: "/sign_in",
         data: {
             uid_give: uid,
-            password_give: password
+            password_give: password,
+            is_quit_give : is_quit
         },
         success: function (response) {
             if (response['result'] == 'success') {
@@ -43,7 +44,8 @@ function sign_up() {
     let birthyy = $("#birthyy").val()
     let birthmm = $("#birthmm").val()
     let birthdd = $("#birthdd").val()
-    console.log(uid, password, password2, nickname, birthyy, birthmm, birthdd)
+    let is_quit = 0
+    console.log(uid, password, password2, nickname, birthyy, birthmm, birthdd, is_quit)
 
 
     if ($("#help-id").hasClass("is-danger")) {
@@ -108,7 +110,9 @@ function sign_up() {
             nickname_give: nickname,
             birthyy_give: birthyy,
             birthmm_give: birthmm,
-            birthdd_give: birthdd
+            birthdd_give: birthdd,
+            is_quit_give: is_quit
+
         },
         success: function (response) {
             alert("회원가입을 축하드립니다!")

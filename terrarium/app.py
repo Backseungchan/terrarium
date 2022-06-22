@@ -16,9 +16,17 @@ app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 ca = certifi.where()  # mongodb 보안 문제로 추가
 
 # 철호님 DB
-client = MongoClient('mongodb+srv://test:sparta@cluster0.ihwyd.mongodb.net/Cluster0?retryWrites=true&w=majority',
-                     tlsCAFile=ca)
+# client = MongoClient('mongodb+srv://test:sparta@cluster0.ihwyd.mongodb.net/Cluster0?retryWrites=true&w=majority',
+#                      tlsCAFile=ca)
+# db = client.dbsparta
+
+client = MongoClient('mongodb+srv://test:sparta@cluster0.stpfk.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
 db = client.dbsparta
+
+
+
+# JWT 토큰에는, payload와 시크릿키가 필요
+# 시크릿키가 있어야 토큰을 디코딩(=풀기) 해서 payload 값을 볼 수 있음
 
 SECRET_KEY = 'SPARTA'
 
@@ -35,7 +43,6 @@ def home():
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 
-# 문제생기면 여기부터 확인
 @app.route('/login')
 def login():
     msg = request.args.get("msg")
@@ -47,11 +54,19 @@ def sign_in():
     # 로그인
     uid_receive = request.form['uid_give']
     password_receive = request.form['password_give']
+    is_quit_receive = request.form['is_quit_give']
 
+    # PW 암호화
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    # ID, 암호화 된 PW를 가지고 해당 유저 찾기
     result = db.users.find_one({'uid': uid_receive, 'password': pw_hash})
+    result2 = result["is_quit"]
 
-    if result is not None:
+    if result2 == str(1):
+        return jsonify({'result': 'fail', 'msg': '탈퇴한 회원입니다.'})
+
+    # 찾으면 JWT 토큰 만들어 발급
+    elif result is not None:
         payload = {
             'id': uid_receive,
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 1일 유지
@@ -60,9 +75,6 @@ def sign_in():
 
         return jsonify({'result': 'success', 'token': token})
 
-    # elif "is_quit" in data == 1 :
-
-    # 찾지 못하면
     else:
         return jsonify({'result': 'fail', 'msg': '존재하지 않는 아이디거나 비밀번호가 일치하지 않습니다.'})
 
@@ -75,6 +87,7 @@ def sign_up():
     birthmm_receive = request.form['birthmm_give']
     birthdd_receive = request.form['birthdd_give']
     nickname_receive = request.form['nickname_give']
+    is_quit_receive = request.form['is_quit_give']
     password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     doc = {
         "uid": uid_receive,  # 아이디
@@ -83,6 +96,7 @@ def sign_up():
         "birthyy": birthyy_receive,  # 출생년도
         "birthmm": birthmm_receive,  # 출생월
         "birthdd": birthdd_receive,  # 출생일
+        "is_quit": is_quit_receive
     }
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
