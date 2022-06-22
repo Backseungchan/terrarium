@@ -245,8 +245,7 @@
                 <div class="divider"></div>
                 <h4 class="tags">최근 작성한 게시글</h4>
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                    <!--                    작성 게시물 중 최근 3건을 슬라이싱. DB 연결 이후 api단에서 해결하는 것으로 수정.-->
-                    {% for post in posts.posts[0:3] %}
+                    {% for post in data.recent_posts %}
                     <div class="col">
                         <div class="card shadow-sm">
                             <div class="card-img-top"
@@ -271,10 +270,10 @@
 
                 <h4 class="tags">최근 작성한 댓글</h4>
                 <ul class="list-group">
-                    {% for reply in replies.replies[0:3] %}
+                    {% for post in data.recent_replies %}
                     <li class="list-group-item">
-                        <p>{{ reply.text }}</p>
-                        <a href="/{{ reply.postnum }}"><strong>게시글 : </strong>{{ reply.title }}</a>
+                        <p>{{ post.replies.text }}</p>
+                        <a href="/{{ post.postnum }}"><strong>게시글 : </strong>{{ post.title }}</a>
                     </li>
                     {% endfor %}
                 </ul>
@@ -301,7 +300,7 @@
                 <h3>작성한 게시글</h3>
                 <div class="divider"></div>
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                    {% for post in posts.posts %}
+                    {% for post in data.posts %}
                     <div class="col">
                         <div class="card shadow-sm">
                             <div class="card-img-top"
@@ -351,10 +350,10 @@
                 <h3>작성한 댓글</h3>
                 <div class="divider"></div>
                 <ul class="list-group">
-                    {% for reply in replies.replies %}
+                    {% for post in data.replies %}
                     <li class="list-group-item">
-                        <p>{{ reply.text }}</p>
-                        <a href="/{{ reply.postnum }}"><strong>게시글 : </strong>{{ reply.title }}</a>
+                        <p>{{ post.replies.text }}</p>
+                        <a href="/{{ post.postnum }}"><strong>게시글 : </strong>{{ post.title }}</a>
                     </li>
                     {% endfor %}
                 </ul>

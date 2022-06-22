@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🌿Terrarium</title>
+    <!-- og 태그-->
+    <meta property="og:title" content="🌿Terrarium - 테라리움">
+    <meta property="og:image" content="/og_image.jpg">
+    <meta property="og:description" content="잘 키운 반려식물 열 반려동물 안부럽다? 내가 키운 식물로 재테크 까지 모든 건 테라리움에서~">
+    <!-- jQuery 로드 -->
+    <!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- 부트스트랩 CSS 로드 -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <!-- 부트스트랩 Javascript(애니메이션 등에 사용됨) 로드 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+            crossorigin="anonymous"></script>
+    <!-- 테마 CSS 로드(지금은 폰트만 있는 상태, theme.css 수정 시 주석도 수정해주세요) -->
+    <link rel="stylesheet" href="../static/theme.css">
+
+    <style>
+        .btn-sm {
+            height: fit-content;
+            padding: 0px 5px;
+        }
+
+        .reply-button-box {
+            width: fit-content;
+            text-align: right;
+            /*display: inline-block;*/
+            /*background-color: #85c797;*/
+        }
+
+        .reply-button-box > a {
+            color: darkgrey;
+        }
+
+        .reply-write-box {
+            width: 100%;
+            height: auto;
+            background-color: #eeeeee;
+            margin-top: 20px;
+            padding: 15px;
+        }
+    </style>
+
+    <script src="../static/js/reply.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <ul class="list-group">
+        {% print(replies) %}
+        {% for reply in replies %}
+        <li class="list-group-item reply-box">
+            <h5 style="display: inline">{{ reply.name }}</h5>
+
+            <!-- 기본 상태: 댓글 텍스트 출력 -->
+            <p id="reply_text{{ reply.replynum }}">{{ reply.text }}</p>
+            <!-- 수정 상태: 수정 텍스트 출력 -->
+            <div class="form-group d-none" id="reply_textarea_update{{ reply.replynum }}">
+                <textarea class="form-control" id="reply_update_text{{ reply.replynum }}" rows="3">{{ reply.text }}</textarea>
+            </div>
+
+            <!-- 현재 사용자와 댓글 작성자의 uid가 일치할 경우 수정/삭제 버튼 출력 -->
+
+            <!-- 기본 상태: 수정/삭제 버튼 출력 -->
+            <div id="reply_delete_button_box{{ reply.replynum }}" style="width: 100%; text-align: right">
+                <div class="btn-group reply-button-box" role="group" aria-label="Basic example">
+                    <button onclick="reply_toggle_update({{ reply.replynum }})" type="button"
+                            class="btn btn-outline-dark btn-sm">수정
+                    </button>
+                    <button onclick="reply_delete({{ reply.replynum }}, {{ postnum }})" type="button"
+                            class="btn btn-outline-dark btn-sm">삭제
+                    </button>
+                </div>
+            </div>
+            <!-- 수정 상태: 수정완료/취소 버튼 출력 -->
+            <div id="reply_update_button_box{{ reply.replynum }}" class="d-none" style="width: 100%; text-align: right">
+                <div class="btn-group reply-button-box" role="group" aria-label="Basic example">
+                    <button onclick="reply_update({{ reply.replynum }}, {{ postnum }})" type="button"
+                            class="btn btn-outline-success btn-sm">수정완료
+                    </button>
+                    <button onclick="reply_cancel_update({{ reply.replynum }})" type="button"
+                            class="btn btn-outline-dark btn-sm">취소
+                    </button>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    <div class="reply-write-box">
+        <div class="form-group">
+            <label for="reply_textarea">댓글 작성하기</label>
+            <textarea class="form-control" id="reply_textarea" rows="3"></textarea>
+        </div>
+        <div style="width: 100%; text-align: right">
+            <button onclick="reply_post({{ postnum }}, {{ uid }})" class="btn btn-success" style="margin-top: 10px;">
+                등록
+            </button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
