@@ -15,7 +15,7 @@
 
 와이어프레임
 
-![와이어프레임](https://user-images.githubusercontent.com/103014298/174975368-b7bea884-843f-4dcd-9300-2a3256b49131.png)
+<img src = "https://raw.githubusercontent.com/Backseungchan/terrarium/d91dceb8fce0b59a70f8bdc9c7ce474b66e65a44/%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84.svg">
 
 
 개발해야 하는 기능들
