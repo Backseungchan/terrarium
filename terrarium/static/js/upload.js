@@ -18,7 +18,10 @@ function cancel() {
 }
 
 // 완료 버튼
-function posting(uid, category) {
+function posting(category) {
+  const URLSearch = new URLSearchParams(location.search);
+  let uid = URLSearch.get("uid");
+
   let title = $("#title").val();
   let pic = $("#pic")[0].files[0];
   let contents = $("#contents").val();

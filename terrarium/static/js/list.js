@@ -5,3 +5,15 @@ function updateButton(postnum, category) {
   location.href =
     "../updatepage" + "?category=" + category + "&postnum=" + postnum;
 }
+
+function myPage(uid) {
+  location.href = "../mypage?uid=" + uid;
+}
+
+function goBack() {
+  location.href = "../";
+}
+
+function uploadButton(category, uid) {
+  location.href = "../uploadpage?uid=" + uid;
+}

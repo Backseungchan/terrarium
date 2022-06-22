@@ -100,7 +100,7 @@ def check_dup():
 # 게시판 C,U
 @app.route('/uploadpage')
 def load_uploadPage():
-    return render_template("uploadpage.html",uid = 'bsc',category = "info")
+    return render_template("uploadpage.html",category = "info")
 
 @app.route('/updatepage')
 def load_updatePage():
