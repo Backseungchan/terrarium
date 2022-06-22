@@ -36,25 +36,77 @@
             alert('로그아웃!')
             window.location.href = "login"
         }
+
+        function go_mypage() {
+        }
+
+
     </script>
 
 </head>
 <body>
-<nav class="navbar is-fixed-top is-white" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-            <img src="{{ url_for('static', filename='images/logo/logo.png') }}">
-            <strong style="font-family: 'pretendard', sans-serif;font-size: larger;">TERRIUM</strong>
-        </a>
-    </div>
+<div class="terralogo">
+    <img src="../static/images/logo/mainlogo.png">
+</div>
+<div class="header">
 
-    <section class="nvi_bar">
-        <div class="container">
-            <h2 class="subtitle">
-                <button onclick="sign_out()" class="button is-success is-outlined" id="posting-btn">Logout</button>
-            </h2>
+    <nav>
+        <ul>
+            <li><a href="#" class="aa">My page</a></li>
+            <li><a href="#" class="aa" onclick="sign_out()">Logout</a></li>
+        </ul>
+    </nav>
+</div>
+<div class="home-board">
+    <a href="#">
+        <div class="card">
+            <div class="card-image">
+                <figure class="image is-4by3">
+                    <img src="https://images.unsplash.com/photo-1497250681960-ef046c08a56e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8cGxhbnR8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
+                         alt="Placeholder image">
+                </figure>
+                <div class="card-content">
+                    <div class="content">
+                        내 반려식물 자랑하기
+                    </div>
+                </div>
+            </div>
         </div>
-    </section>
-</nav>
+        <a/>
+        <a href="#">
+            <div class="card">
+                <div class="card-image">
+                    <figure class="image is-4by3">
+
+                        <img src="https://images.unsplash.com/photo-1555037015-1498966bcd7c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cGxhbnR8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
+                             alt="Placeholder image">
+
+                    </figure>
+                    <div class="card-content">
+                        <div class="content">
+                            다른 친구들 정보보기
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="#">
+            <div class="card">
+                <div class="card-image">
+                    <figure class="image is-4by3">
+
+                        <img src="https://images.unsplash.com/photo-1533038590840-1cde6e668a91?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHBsYW50fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
+                             alt="Placeholder image">
+
+                    </figure>
+                    <div class="card-content">
+                        <div class="content">
+                            식테크
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+</div>
 </body>
 </html>

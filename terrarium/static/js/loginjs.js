@@ -1,11 +1,11 @@
 function sign_in() {
-    let username = $("#input-username").val()
+    let uid = $("#input-uid").val()
     let password = $("#input-password").val()
 
 
-    if (username == "") {
+    if (uid == "") {
         $("#help-id-login").text("아이디를 입력해주세요.")
-        $("#input-username").focus()
+        $("#input-uid").focus()
         return;
     } else {
         $("#help-id-login").text("")
@@ -21,7 +21,7 @@ function sign_in() {
         type: "POST",
         url: "/sign_in",
         data: {
-            username_give: username,
+            uid_give: uid,
             password_give: password
         },
         success: function (response) {
@@ -36,14 +36,14 @@ function sign_in() {
 }
 
 function sign_up() {
-    let username = $("#input-username").val()
+    let uid = $("#input-uid").val()
     let password = $("#input-password").val()
     let password2 = $("#input-password2").val()
     let nickname = $("#input-nickname").val()
     let birthyy = $("#birthyy").val()
     let birthmm = $("#birthmm").val()
     let birthdd = $("#birthdd").val()
-    console.log(username, password, password2, nickname, birthyy, birthmm, birthdd)
+    console.log(uid, password, password2, nickname, birthyy, birthmm, birthdd)
 
 
     if ($("#help-id").hasClass("is-danger")) {
@@ -103,7 +103,7 @@ function sign_up() {
         type: "POST",
         url: "/sign_up/save",
         data: {
-            username_give: username,
+            uid_give: uid,
             password_give: password,
             nickname_give: nickname,
             birthyy_give: birthyy,
@@ -144,16 +144,16 @@ function is_password(asValue) {
 }
 
 function check_dup() {
-    let username = $("#input-username").val()
-    console.log(username)
-    if (username == "") {
+    let uid = $("#input-uid").val()
+    console.log(uid)
+    if (uid == "") {
         $("#help-id").text("아이디를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
-        $("#input-username").focus()
+        $("#input-uid").focus()
         return;
     }
-    if (!is_nickname(username)) {
+    if (!is_nickname(uid)) {
         $("#help-id").text("아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-10자 길이").removeClass("is-safe").addClass("is-danger")
-        $("#input-username").focus()
+        $("#input-uid").focus()
         return;
     }
     $("#help-id").addClass("is-loading")
@@ -161,12 +161,12 @@ function check_dup() {
         type: "POST",
         url: "/sign_up/check_dup",
         data: {
-            username_give: username
+            uid_give: uid
         },
         success: function (response) {
             if (response["exists"]) {
                 $("#help-id").text("이미 존재하는 아이디입니다.").removeClass("is-safe").addClass("is-danger")
-                $("#input-username").focus()
+                $("#input-uid").focus()
             } else {
                 $("#help-id").text("사용할 수 있는 아이디입니다.").removeClass("is-danger").addClass("is-success")
             }
