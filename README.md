@@ -20,5 +20,5 @@
 
 개발해야 하는 기능들
 
-<img src = "[https://raw.githubusercontent.com/Backseungchan/terrarium/8a529fed3d890bf5991b5e5cae5f8a4446a17f7b/wireflame.svg](https://github.com/Backseungchan/terrarium/blob/main/api.jpg?raw=true)">
+<img src = "https://github.com/Backseungchan/terrarium/blob/main/api.jpg?raw=true">
 
