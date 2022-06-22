@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>🌿Terrarium</title>
@@ -20,26 +21,25 @@
     <link rel="stylesheet" href="../static/theme.css">
     <link rel="stylesheet" href="../static/css/mypage.css">
 
-    <script>
+	<script>
 
-        // 현재 페이지
-        let page = document.location.pathname.split("/")[2];
+		// 현재 페이지
+		let page = document.location.pathname.split("/")[2];
 
-        // 페이지가 로드되면 현재 페이지(page)에 따라서 카테고리 표시 상태를 바꾼다.
-        $(document).ready(function () {
-            $("#home").removeClass("active")
-            $("#info").removeClass("active")
-            $("#posts").removeClass("active")
-            $("#replies").removeClass("active")
-            $("#" + page).addClass("active")
+		// 페이지가 로드되면 현재 페이지(page)에 따라서 카테고리 표시 상태를 바꾼다.
+		$(document).ready(function () {
+			$("#home").removeClass("active")
+			$("#info").removeClass("active")
+			$("#posts").removeClass("active")
+			$("#replies").removeClass("active")
+			$("#" + page).addClass("active")
 
-            $("#home").addClass("link-dark")
-            $("#info").addClass("link-dark")
-            $("#posts").addClass("link-dark")
-            $("#replies").addClass("link-dark")
-            $("#" + page).removeClass("link-dark")
-        })
-
+			$("#home").addClass("link-dark")
+			$("#info").addClass("link-dark")
+			$("#posts").addClass("link-dark")
+			$("#replies").addClass("link-dark")
+			$("#" + page).removeClass("link-dark")
+		})
 
         function is_password(asValue) {
             var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
@@ -122,13 +122,14 @@
                     data: {id_give: uid},
                     success: function () {
                         alert("탈퇴가 완료되었습니다.")
-                        window.location.href("/")
+                        window.location.href("/login")
                     }
                 })
             }
         }
     </script>
 </head>
+
 <body>
 <div class="container d-flex flex-nowrap">
     <div>
@@ -206,12 +207,12 @@
         </div>
     </div>
 
-    <!-- Sidebar 오른쪽 내용 박스-->
-    <div class="right-box">
-        <div class="content-box">
+		<!-- Sidebar 오른쪽 내용 박스-->
+		<div class="right-box">
+			<div class="content-box">
 
-            <!-- app.py에서 받아온 page 파라미터가 무엇이냐에 따라 페이지를 다르게 출력. 아래의 if page 모두 동일.-->
-            <!-- 문법은 Jinja-->
+				<!-- app.py에서 받아온 page 파라미터가 무엇이냐에 따라 페이지를 다르게 출력. 아래의 if page 모두 동일.-->
+				<!-- 문법은 Jinja-->
 
             <!--            ----------------------------------------비밀번호 확인----------------------------------------              -->
             {% if page == "mypage_pwconfirm" %}
@@ -394,10 +395,11 @@
             </div>
             {% endif %}
 
-        </div>
-    </div>
-</div>
+			</div>
+		</div>
+	</div>
 
 
 </body>
+
 </html>

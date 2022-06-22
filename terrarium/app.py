@@ -1,38 +1,194 @@
-import datetime
 
-from flask import Flask, render_template, request, jsonify
-from static.sampledata import posts
+import datetime
+from unicodedata import category
 import certifi
 from pymongo import MongoClient
-import hashlib
 import jwt
+import datetime
+import hashlib
+import json
+from flask import Flask, render_template, jsonify, request, redirect, url_for
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
-ca = certifi.where()
-client = MongoClient('mongodb+srv://test:sparta@cluster0.cdgld5e.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
-# client = MongoClient('mongodb+srv://test:sparta@cluster0.ihwyd.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
-db = client.terrarium
+# 노희정 DB
+# ca = certifi.where()
+# client = MongoClient('mongodb+srv://test:sparta@cluster0.cdgld5e.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
+# # client = MongoClient('mongodb+srv://test:sparta@cluster0.ihwyd.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
+# db = client.terrarium
+
+ca = certifi.where()  # mongodb 보안 문제로 추가
+
+# 철호님 DB
+client = MongoClient('mongodb+srv://test:sparta@cluster0.ihwyd.mongodb.net/Cluster0?retryWrites=true&w=majority',
+                     tlsCAFile=ca)
+db = client.dbsparta
 
 SECRET_KEY = 'SPARTA'
 
-pwconfirmed = False
-# uid = "asd"
-
-# TODO: 모든 목록 페이지에 대해 페이지네이션을 위해 데이터 끊기가 필요함.
-# TODO: imhjnoh가 작성한 내용에서 댓글의 경우 유저아이디를 uid, 포스트의 경우 ID 로 작업했기 때문에 통일 필요.
-
 @app.route('/')
-def main():
-    return render_template("index.html")
+def home():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        return render_template('index.html')
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 
-@app.route('/detail')
-def detail():
-    return render_template("detail.html")
+# 문제생기면 여기부터 확인
+@app.route('/login')
+def login():
+    msg = request.args.get("msg")
+    return render_template('login.html', msg=msg)
 
 
-# TODO: 패스워드가 확인되지 않아도 주소를 입력하면 들어가짐
+@app.route('/sign_in', methods=['POST'])
+def sign_in():
+    # 로그인
+    uid_receive = request.form['uid_give']
+    password_receive = request.form['password_give']
+
+    pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    result = db.users.find_one({'uid': uid_receive, 'password': pw_hash})
+
+    if result is not None:
+        payload = {
+            'id': uid_receive,
+            'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 1일 유지
+        }
+        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
+
+        return jsonify({'result': 'success', 'token': token, 'uid':uid_receive})
+
+    # elif "is_quit" in data == 1 :
+
+    # 찾지 못하면
+    else:
+        return jsonify({'result': 'fail', 'msg': '존재하지 않는 아이디거나 비밀번호가 일치하지 않습니다.'})
+
+
+@app.route('/sign_up/save', methods=['POST'])
+def sign_up():
+    uid_receive = request.form['uid_give']
+    password_receive = request.form['password_give']
+    birthyy_receive = request.form['birthyy_give']
+    birthmm_receive = request.form['birthmm_give']
+    birthdd_receive = request.form['birthdd_give']
+    nickname_receive = request.form['nickname_give']
+    password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    doc = {
+        "uid": uid_receive,  # 아이디
+        "password": password_hash,  # 비밀번호
+        "nickname": nickname_receive,  # 닉네임
+        "birthyy": birthyy_receive,  # 출생년도
+        "birthmm": birthmm_receive,  # 출생월
+        "birthdd": birthdd_receive,  # 출생일
+    }
+    db.users.insert_one(doc)
+    return jsonify({'result': 'success'})
+
+
+@app.route('/sign_up/check_dup', methods=['POST'])
+def check_dup():
+    uid_receive = request.form['uid_give']
+    exists = bool(db.users.find_one({"uid": uid_receive}))
+    return jsonify({'result': 'success', 'exists': exists})
+
+
+# 게시판 C,U
+@app.route('/uploadpage')
+def load_uploadPage():
+    category_dict = request.args.to_dict()
+    return render_template("uploadpage.html",category = category_dict["category"])
+
+@app.route('/updatepage')
+def load_updatePage():
+    return render_template("updatepage.html", uid='bsc')
+
+
+@app.route("/detail", methods=["GET"])
+def get_post():
+    postnum_dict = request.args.to_dict()  # postnum을 dict형태로 가져옴
+    # postnum과 일치하는 post를 db에서 가져옴
+    post = list(db.post.find({'postnum': int(postnum_dict["postnum"])}, {'_id': False, }))
+    return jsonify({'post': post})
+
+
+@app.route('/upload', methods=['POST'])
+def save_post():
+    uid = request.form['uid']
+    title = request.form['title']
+    contents = request.form['contents']
+    category = request.form['category']
+    try:
+        pic = request.files["pic"]
+        filename, extension = pic.filename.split('.')  # 파일의 이름, 확장자
+        save_to = f'static/pic/' + pic.filename  # 파일 저장 경로 설정
+        pic.save(save_to)  # 파일 저장
+    except:
+        pic = None
+
+    post_list = list(db.post.find({}, {'_id': False}))
+    postnum = len(post_list) + 1
+    doc = {
+        'uid': uid,
+        'postnum': postnum,
+        'category': category,
+        'title': title,
+        'contents': contents,
+    }
+
+    if pic != None:
+        doc['pic'] = f'{filename}.{extension}'
+    db.post.insert_one(doc)
+
+    return jsonify({'msg': "저장 성공"})
+
+
+@app.route('/update', methods=['POST'])
+def fix_post():
+    postnum = request.form['postnum']
+    title = request.form['title']
+    contents = request.form['contents']
+    try:
+        pic = request.files["pic"]
+        filename, extension = pic.filename.split('.')  # 파일의 이름, 확장자
+        save_to = f'static/pic/' + pic.filename  # 파일 저장 경로 설정
+        pic.save(save_to)  # 파일 저장
+    except:
+        pic = None
+
+    doc = {
+        'title': title,
+        'contents': contents,
+    }
+
+    if pic != None:
+        doc['pic'] = f'{filename}.{extension}'
+
+    print(doc)
+    db.post.update_one({'postnum': int(postnum)}, {'$set': doc})
+
+    return jsonify({'msg': "수정 성공"})
+
+
+# 목록 전체 조회
+@app.route('/list/<category>')
+def show_list(category):
+    uid_dict = request.args.to_dict()
+    print("hello")
+    print(type(uid_dict["uid"]))
+    category_posts = list(db.post.find({'category': category}, {'_id': False, 'category': False}))
+    return render_template("list.html", category=category, posts=category_posts, uid=uid_dict["uid"])
+
+
+# 마이페이지
 @app.route('/mypage')
 def mypage_pw():
     uid = request.args.get("uid")
@@ -65,7 +221,7 @@ def mypage(page):
     print(data)
     # 홈일 경우 최근 작성한 게시글 3개와 최근 작성한 댓글 3개
     if page == "home":
-        recent_posts = list(db.posts.find({"uid": uid}, {"_id":False}).limit(3))
+        recent_posts = list(db.post.find({"uid": uid}, {"_id":False}).limit(3))
         data["recent_posts"] = recent_posts
         # 각 포스트의 replies에서 uid가 일치하는 댓글을 리스트로 가져온다.
         recent_replies = list(db.posts.aggregate([
@@ -78,12 +234,12 @@ def mypage(page):
         data["recent_replies"] = recent_replies
     # 작성한 게시글
     elif page == "posts":
-        posts = list(db.posts.find({"uid": uid}, {"_id": False}))
+        posts = list(db.post.find({"uid": uid}, {"_id": False}))
         data["posts"] = posts
     # 작성한 댓글
     elif page == "replies":
         # 각 포스트의 replies에서 uid가 일치하는 댓글을 리스트로 가져온다.
-        replies = list(db.posts.aggregate([
+        replies = list(db.post.aggregate([
             {"$match":{"replies.uid": uid}},
             {"$unwind": "$replies"},
             {"$match":{"replies.uid": uid}},
@@ -116,6 +272,7 @@ def pwchange():
     print(password_hash)
     db.users.update_one({"uid": uid}, {"$set": {"password": password_hash}})
     return jsonify({"status":"success"})
+
 
 
 @app.route('/reply_sample')
@@ -197,8 +354,6 @@ def reply_update():
     text_receive = request.form['text_give']
     db.posts.update_one({"postnum": postnum_receive, "replies.replynum":replynum_receive}, {'$set': {"replies.$.text":text_receive}})
     return jsonify({"status":"success"})
-
-
 
 
 if __name__ == '__main__':

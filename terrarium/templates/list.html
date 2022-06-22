@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>🌿Terrarium</title>
+	<!-- og 태그-->
+	<meta property="og:title" content="🌿Terrarium - 테라리움">
+	<meta property="og:image" content="/og_image.jpg">
+	<meta property="og:description" content="잘 키운 반려식물 열 반려동물 안부럽다? 내가 키운 식물로 재테크 까지 모든 건 테라리움에서~">
+	<!-- jQuery 로드 -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<!-- 부트스트랩 CSS 로드 -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+	<!-- 부트스트랩 Javascript(애니메이션 등에 사용됨) 로드 -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+		crossorigin="anonymous"></script>
+	<!-- 테마 CSS 로드(지금은 폰트만 있는 상태, theme.css 수정 시 주석도 수정해주세요) -->
+	<link rel="stylesheet" href="../static/css/theme.css">
+	<link rel="stylesheet" href="../static/css/list.css">
+	<!-- js호출 -->
+	<script src="../static/js/list.js"></script>
+</head>
+
+<body>
+	<div class="container d-flex flex-nowrap">
+		<div class="right-box">
+			<div class="content-box">
+				<div class="header-box">
+					<h3>{{'식물정보' if category == 'info' else '식테크' if category == 'tech' else '식물자랑'}} 게시글</h3>
+					<nav class="nav-box">
+						<button type="button" class="btn btn-success" onclick="goBack('{{uid}}')">뒤로가기</button>
+						<button type="button" class="btn btn-success"
+							onclick="uploadButton('{{category}}','{{uid}}')">작성하기</button>
+						<button type="button" class="btn btn-success" onclick="myPage('{{uid}}')">마이페이지</button>
+					</nav>
+				</div>
+				<div class="divider"></div>
+				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+					{% for post in posts %}
+					<div class="col">
+						<div class="card shadow-sm">
+							<div class="card-img-top"
+								style="height: 255px; background-image: url(../static/pic/{{ post.pic }}),url(../static/images/noImage.gif); background-size: cover;">
+							</div>
+
+							<div class="card-body">
+								<h4>{{ '제목없음' if post.title == "" else post.title }}</h4>
+								<p class="card-text">{{ '내용없음' if post.contents == "" else post.contents
+									}}</p>
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="btn-group">
+										<button type="button" class="btn btn-sm btn-outline-secondary">바로가기</button>
+										{% if post.uid == uid %}
+										<button type="button" class="btn btn-sm btn-outline-secondary"
+											onclick="updateButton({{post.postnum}},'{{category}}','{{post.uid}}')">수정하기</button>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+
+</html>
