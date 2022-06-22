@@ -1,7 +1,7 @@
 function sign_in() {
-
     let username = $("#input-username").val()
     let password = $("#input-password").val()
+
 
     if (username == "") {
         $("#help-id-login").text("아이디를 입력해주세요.")
@@ -10,7 +10,6 @@ function sign_in() {
     } else {
         $("#help-id-login").text("")
     }
-
     if (password == "") {
         $("#help-password-login").text("비밀번호를 입력해주세요.")
         $("#input-password").focus()
@@ -37,10 +36,6 @@ function sign_in() {
 }
 
 function sign_up() {
-    $("#input-username").val("")
-    $("#input-password").val("")
-
-
     let username = $("#input-username").val()
     let password = $("#input-password").val()
     let password2 = $("#input-password2").val()
@@ -125,10 +120,6 @@ function sign_up() {
 }
 
 function toggle_sign_up() {
-    $("#input-username").val("")
-    $("#input-password").val("")
-
-
     $("#sign-up-box").toggleClass("is-hidden")
     $("#div-sign-in-or-up").toggleClass("is-hidden")
     $("#btn-check-dup").toggleClass("is-hidden")
@@ -141,21 +132,6 @@ function toggle_sign_up() {
     $("#help-mm").toggleClass("is-hidden")
     $("#help-dd").toggleClass("is-hidden")
 }
-
-$(document).ready(function(){
-    $('.main i').on('click',function(){
-        $('input').toggleClass('active');
-        if($('input').hasClass('active')){
-            $(this).attr('class',"fa fa-eye-slash fa-lg")
-            .prev('input').attr('type',"text");
-        }else{
-            $(this).attr('class',"fa fa-eye fa-lg")
-            .prev('input').attr('type','password');
-        }
-    });
-});
-
-
 
 function is_nickname(asValue) {
     var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
@@ -188,7 +164,6 @@ function check_dup() {
             username_give: username
         },
         success: function (response) {
-
             if (response["exists"]) {
                 $("#help-id").text("이미 존재하는 아이디입니다.").removeClass("is-safe").addClass("is-danger")
                 $("#input-username").focus()
@@ -196,7 +171,6 @@ function check_dup() {
                 $("#help-id").text("사용할 수 있는 아이디입니다.").removeClass("is-danger").addClass("is-success")
             }
             $("#help-id").removeClass("is-loading")
-
         }
     });
 }

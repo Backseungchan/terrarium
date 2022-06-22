@@ -3,19 +3,16 @@
 * {
     font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
 }
+body {
+    background-color: white;
+    min-height: 100vh;
+}
 
 .terralogo {
     padding: 60px 0px 40px 0px;
     max-width: 750px;
     max-height: 300px;
 }
-
-body {
-
-    background-color: white;
-    min-height: 100vh;
-}
-
 .section {
     padding: 1rem 1.5rem;
     max-width: 750px;
@@ -25,15 +22,11 @@ body {
 .title {
     font-weight: 800;
     font-size: 5rem;
-
 }
 
 .subtitle {
     font-size: 2rem;
 }
-
-/*----------------------------------*/
-/*각종 버튼들 ex) 중복확인, 회원가입, 취소*/
 
 .button.is-sparta {
     background-color: forestgreen;
@@ -46,11 +39,6 @@ body {
     border-color: forestgreen;
     color: #050000 !important;
 }
-
-
-
-/*----------------------------------*/
-
 
 .help {
     color: black;

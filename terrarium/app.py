@@ -2,7 +2,6 @@ from unicodedata import category
 import certifi
 import json
 from pymongo import MongoClient
-from bson.objectid import ObjectId
 import jwt
 import datetime
 import hashlib
@@ -10,7 +9,6 @@ import json
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from datetime import datetime, timedelta
 from static.sampledata import posts, replies
-from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -84,7 +82,7 @@ def sign_up():
     doc = {
         "username": username_receive,  # 아이디
         "password": password_hash,  # 비밀번호
-        "nickname": nickname_receive, # 닉네임
+        "nickname": nickname_receive,  # 닉네임
         "birthyy": birthyy_receive,  # 출생년도
         "birthmm": birthmm_receive,  # 출생월
         "birthdd": birthdd_receive,  # 출생일
@@ -188,12 +186,14 @@ def mypage(page):
     print(json.dumps(posts))
     return render_template("mypage.html", page=page, posts=posts, replies=replies)
 
+
 @app.route('/reply_sample')
 def reply_sample():
     uid = 15
-    replies_list = list(db.posts.find_one({"postnum": 1}, {"_id":False})["replies"])
+    replies_list = list(db.posts.find_one({"postnum": 1}, {"_id": False})["replies"])
     print(replies_list)
     return render_template("reply_sample.html", replies=replies_list, postnum=1, uid=uid)
+
 
 @app.route('/reply', methods=['POST'])
 def reply_post():
@@ -210,19 +210,18 @@ def reply_post():
         "text": text_receive,
         "replynum": str(replies_num + 1)
     }
-    db.posts.update_one({"postnum":postnum_receive}, {'$push': {'replies': data}})
+    db.posts.update_one({"postnum": postnum_receive}, {'$push': {'replies': data}})
     return jsonify({'msg': 'POST(완료) 연결 완료!'})
+
 
 @app.route('/reply/del', methods=['POST'])
 def reply_delete():
     postnum_receive = int(request.form['postnum_give'])
     replynum_receive = int(request.form['replynum_give'])
     print(postnum_receive, replynum_receive)
-    db.posts.update_one({"postnum": postnum_receive}, {'$pull': {'replies': {"replynum" : replynum_receive}}})
+    db.posts.update_one({"postnum": postnum_receive}, {'$pull': {'replies': {"replynum": replynum_receive}}})
     return jsonify({'msg': 'POST(완료) 연결 완료!'})
 
 
 if __name__ == '__main__':
-
     app.run('0.0.0.0', port=8000, debug=True)
-
