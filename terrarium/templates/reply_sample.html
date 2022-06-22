@@ -68,6 +68,7 @@
             <!-- 현재 사용자와 댓글 작성자의 uid가 일치할 경우 수정/삭제 버튼 출력 -->
 
             <!-- 기본 상태: 수정/삭제 버튼 출력 -->
+            {% if uid == reply.uid %}
             <div id="reply_delete_button_box{{ reply.replynum }}" style="width: 100%; text-align: right">
                 <div class="btn-group reply-button-box" role="group" aria-label="Basic example">
                     <button onclick="reply_toggle_update({{ reply.replynum }})" type="button"
@@ -78,6 +79,7 @@
                     </button>
                 </div>
             </div>
+            {% endif %}
             <!-- 수정 상태: 수정완료/취소 버튼 출력 -->
             <div id="reply_update_button_box{{ reply.replynum }}" class="d-none" style="width: 100%; text-align: right">
                 <div class="btn-group reply-button-box" role="group" aria-label="Basic example">
@@ -98,7 +100,7 @@
             <textarea class="form-control" id="reply_textarea" rows="3"></textarea>
         </div>
         <div style="width: 100%; text-align: right">
-            <button onclick="reply_post({{ postnum }}, {{ uid }})" class="btn btn-success" style="margin-top: 10px;">
+            <button onclick="reply_post({{ postnum }}, '{{ uid }}')" class="btn btn-success" style="margin-top: 10px;">
                 등록
             </button>
         </div>

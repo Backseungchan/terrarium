@@ -40,6 +40,7 @@
             $("#" + page).removeClass("link-dark")
         })
 
+
         function is_password(asValue) {
             var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
             return regExp.test(asValue);
@@ -50,8 +51,24 @@
         }
 
         // 비밀번호 확인 버튼 눌렀을 때 작동하는 함수
-        function confirm_password() {
-            window.location.href = "/mypage/home"
+        function confirm_password(uid) {
+            let password = $("#check-password").val()
+            console.log(uid, password)
+            $.ajax({
+                type: "POST",
+                url: "/pwcheck",
+                data: {
+                    uid_give: uid,
+                    password_give: password
+                },
+                success: function (response) {
+                    if(response["status"] == "success"){
+                        window.location.href = "/mypage/home?uid=" + uid
+                    }else{
+                        alert("비밀번호가 일치하지 않습니다.")
+                    }
+                }
+            });
         }
 
         // 비밀번호 변경
@@ -117,7 +134,7 @@
     <div>
         <!-- 부트스트랩 Sidebar -->
         <div class="d-flex flex-column flex-shrink-0 p-3 bg-white sidebar-container" style="width: 280px;">
-            <a href="/mypage" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+            <a href="/mypage?uid={{uid}}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
                 <svg class="bi pe-none me-2" width="40" height="32">
                     <use xlink:href="#bootstrap"/>
                 </svg>
@@ -136,7 +153,7 @@
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a href="/mypage/home" id="home" class="nav-link" aria-current="page">
+                    <a href="/mypage/home?uid={{uid}}" id="home" class="nav-link" aria-current="page">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <!--                        <use xlink:href="#home"/>-->
                         </svg>
@@ -144,7 +161,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/mypage/info" id="info" class="nav-link link-dark">
+                    <a href="/mypage/info?uid={{uid}}" id="info" class="nav-link link-dark">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <!--                        <use xlink:href="#speedometer2"/>-->
                         </svg>
@@ -152,7 +169,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/mypage/posts" id="posts" class="nav-link link-dark">
+                    <a href="/mypage/posts?uid={{uid}}" id="posts" class="nav-link link-dark">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <!--                        <use xlink:href="#table"/>-->
                         </svg>
@@ -160,7 +177,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/mypage/replies" id="replies" class="nav-link link-dark">
+                    <a href="/mypage/replies?uid={{uid}}" id="replies" class="nav-link link-dark">
                         <svg class="bi pe-none me-2" width="16" height="16">
                             <!--                        <use xlink:href="#grid"/>-->
                         </svg>
@@ -170,22 +187,22 @@
                 {% endif %}
             </ul>
             <hr>
-            <div class="dropdown">
-                <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
-                   id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                    <strong>mdo</strong>
-                </a>
-                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-                    <li><a class="dropdown-item" href="#">New project...</a></li>
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="#">Sign out</a></li>
-                </ul>
-            </div>
+<!--            <div class="dropdown">-->
+<!--                <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"-->
+<!--                   id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">-->
+<!--                    <strong>mdo</strong>-->
+<!--                </a>-->
+<!--                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">-->
+<!--                    <li><a class="dropdown-item" href="#">New project...</a></li>-->
+<!--                    <li><a class="dropdown-item" href="#">Settings</a></li>-->
+<!--                    <li><a class="dropdown-item" href="#">Profile</a></li>-->
+<!--                    <li>-->
+<!--                        <hr class="dropdown-divider">-->
+<!--                    </li>-->
+<!--                    <li><a class="dropdown-item" href="#">Sign out</a></li>-->
+<!--                </ul>-->
+<!--            </div>-->
         </div>
     </div>
 
@@ -202,10 +219,10 @@
             <div class="divider"></div>
             <p>비밀번호를 입력해주세요.</p>
             <div class="form-floating" style="width: 300px;">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                <label for="floatingPassword">Password</label>
+                <input type="password" class="form-control" id="check-password" placeholder="Password">
+                <label for="check-password">Password</label>
             </div>
-            <button onclick="confirm_password()" type="button" class="confirm-button btn btn-primary">확인</button>
+            <button onclick="confirm_password('{{uid}}')" type="button" class="confirm-button btn btn-primary">확인</button>
             {% endif %}
 
             <!--            ----------------------------------------마이페이지 홈----------------------------------------              -->
@@ -257,6 +274,8 @@
                 <div class="divider"></div>
                 <h6 class="tags">ID</h6>
                 <p>{{ uid }}</p>
+                <h6 class="tags">닉네임</h6>
+                <p>{{ data.nickname }}</p>
                 <h6 class="tags">생년월일</h6>
                 <p>{{ data.birthyy +"-"+ data.birthmm +"-"+ data.birthdd }}</p>
 
@@ -280,6 +299,8 @@
                     </div>
                     <p id="help-password2" class="help is-hidden">비밀번호를 다시 한 번 입력해주세요.</p>
                     <button onclick="change_password('{{uid}}')" type="button" class="btn btn-outline-success">비밀번호 변경
+                    </button>
+                    <button onclick="toggle_pw_field()" type="button" class="btn btn-outline-secondary">취소
                     </button>
                 </div>
 
@@ -316,25 +337,25 @@
                     </div>
                     {% endfor %}
                 </div>
-                <div class="navigation-box">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination">
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+<!--                <div class="navigation-box">-->
+<!--                    <nav aria-label="Page navigation example">-->
+<!--                        <ul class="pagination">-->
+<!--                            <li class="page-item">-->
+<!--                                <a class="page-link" href="#" aria-label="Previous">-->
+<!--                                    <span aria-hidden="true">&laquo;</span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+<!--                            <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+<!--                            <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+<!--                            <li class="page-item">-->
+<!--                                <a class="page-link" href="#" aria-label="Next">-->
+<!--                                    <span aria-hidden="true">&raquo;</span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </nav>-->
+<!--                </div>-->
             </div>
             {% endif %}
 
@@ -351,25 +372,25 @@
                     </li>
                     {% endfor %}
                 </ul>
-                <div class="navigation-box">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination">
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+<!--                <div class="navigation-box">-->
+<!--                    <nav aria-label="Page navigation example">-->
+<!--                        <ul class="pagination">-->
+<!--                            <li class="page-item">-->
+<!--                                <a class="page-link" href="#" aria-label="Previous">-->
+<!--                                    <span aria-hidden="true">&laquo;</span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+<!--                            <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+<!--                            <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+<!--                            <li class="page-item">-->
+<!--                                <a class="page-link" href="#" aria-label="Next">-->
+<!--                                    <span aria-hidden="true">&raquo;</span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </nav>-->
+<!--                </div>-->
             </div>
             {% endif %}
 
