@@ -1,20 +1,17 @@
-<<<<<<< HEAD
+import certifi
 from pymongo import MongoClient
+
+ca = certifi.where()
+
 import jwt
 import datetime
 import hashlib
-import certifi
-from flask import Flask, render_template, jsonify, request, redirect, url_for
-from werkzeug.utils import secure_filename
-from datetime import datetime, timedelta
-=======
-from flask import Flask, render_template, request, jsonify
 import json
+from flask import Flask, render_template, jsonify, request, redirect, url_for
+from datetime import datetime, timedelta
+
 from static.sampledata import posts, replies
-import certifi
-from pymongo import MongoClient
-from bson.objectid import ObjectId
->>>>>>> 3079aa59d88b5cc9851696b26378b765cb540572
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -22,13 +19,8 @@ app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
 SECRET_KEY = 'SPARTA'
 
-ca = certifi.where()
-client = MongoClient('mongodb+srv://test:sparta@cluster0.cdgld5e.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
-db = client.terrarium
-
-ca = certifi.where()
-client = MongoClient('mongodb+srv://test:sparta@cluster0.cdgld5e.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
-db = client.terrarium
+client = MongoClient('mongodb+srv://test:sparta@cluster0.stpfk.mongodb.net/Cluster0?retryWrites=true&w=majority', tlsCAFile=ca)
+db = client.dbsparta
 
 
 @app.route('/')
@@ -43,12 +35,12 @@ def home():
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
+
 # 문제생기면 여기부터 확인
 @app.route('/login')
 def login():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
-
 
 
 @app.route('/sign_in', methods=['POST'])
@@ -63,7 +55,7 @@ def sign_in():
     if result is not None:
         payload = {
             'id': username_receive,
-            'exp': datetime.utcnow() + timedelta(seconds=60 * 1 * 1)  # 로그인 1분 유지
+            'exp': datetime.utcnow() + timedelta(seconds=60 * 1 * 1)  # 로그인 1분 유지 마지막에 수정하겠습니다~
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
 
@@ -85,7 +77,7 @@ def sign_up():
     doc = {
         "username": username_receive,  # 아이디
         "password": password_hash,  # 비밀번호
-        "nickname" : nickname_receive, # 닉네임
+        "nickname": nickname_receive, # 닉네임
         "birthyy": birthyy_receive,  # 출생년도
         "birthmm": birthmm_receive,  # 출생월
         "birthdd": birthdd_receive,  # 출생일
@@ -112,7 +104,6 @@ def mypage(page):
 
 @app.route('/reply_sample')
 def reply_sample():
-    # event_id = "62b18347cfa92ebfb2dbccb5"
     uid = 15
     replies_list = list(db.posts.find_one({"postnum": 1}, {"_id":False})["replies"])
     print(replies_list)
@@ -146,8 +137,6 @@ def reply_delete():
 
 
 if __name__ == '__main__':
-<<<<<<< HEAD
-    app.run('0.0.0.0', port=5000, debug=True)
-=======
+
     app.run('0.0.0.0', port=8000, debug=True)
->>>>>>> 3079aa59d88b5cc9851696b26378b765cb540572
+
