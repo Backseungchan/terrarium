@@ -31,33 +31,52 @@
 				<div class="header-box">
 					<h3>{{'식물정보' if category == 'info' else '식테크' if category == 'tech' else '식물자랑'}} 게시글</h3>
 					<nav class="nav-box">
-						<button type="button" class="btn btn-success" onclick="goBack('{{uid}}')">뒤로가기</button>
+						<button type="button" class="btn btn-success" onclick="goBack()">뒤로가기</button>
 						<button type="button" class="btn btn-success"
 							onclick="uploadButton('{{category}}','{{uid}}')">작성하기</button>
-						<button type="button" class="btn btn-success" onclick="myPage('{{uid}}')">마이페이지</button>
+						<button type="button" class="btn btn-success" onclick="myPage()">마이페이지</button>
 					</nav>
 				</div>
 				<div class="divider"></div>
 				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 					{% for post in posts %}
-					<div class="col">
-						<div class="card shadow-sm">
-							<div class="card-img-top"
-								style="height: 255px; background-image: url(../static/pic/{{ post.pic }}),url(../static/images/noImage.gif); background-size: cover;">
+					<a href="" data-bs-toggle="modal" data-bs-target="#exampleModal{{post.postnum}}">
+						<div class="col">
+							<div class="card shadow-sm">
+								<div class="card-img-top"
+									style="height: 255px; background-image: url(../static/pic/{{ post.pic }}),url(../static/images/noImage.gif); background-size: cover;">
+								</div>
+								<div class="card-body">
+									<h4>{{ '제목없음' if post.title == "" else post.title }}</h4>
+									<p class="card-text">{{ '내용없음' if post.contents == "" else post.contents
+										}}</p>
+								</div>
 							</div>
-
-							<div class="card-body">
-								<h4>{{ '제목없음' if post.title == "" else post.title }}</h4>
-								<p class="card-text">{{ '내용없음' if post.contents == "" else post.contents
-									}}</p>
-								<div class="d-flex justify-content-between align-items-center">
-									<div class="btn-group">
-										<button type="button" class="btn btn-sm btn-outline-secondary">바로가기</button>
-										{% if post.uid == uid %}
-										<button type="button" class="btn btn-sm btn-outline-secondary"
-											onclick="updateButton({{post.postnum}},'{{category}}','{{post.uid}}')">수정하기</button>
-										{% endif %}
-									</div>
+						</div>
+					</a>
+					<div class="modal fade" id="exampleModal{{post.postnum}}" tabindex="-1"
+						aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-scrollable">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">{{ '제목없음' if post.title == "" else
+										post.title }}</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal"
+										aria-label="Close"></button>
+								</div>
+								<div class="card-img-top"
+									style="height: 255px; background-image: url(../static/pic/{{ post.pic }}),url(../static/images/noImage.gif); background-size: cover;">
+								</div>
+								<div class="modal-body">
+									{{ '내용없음' if post.contents == "" else post.contents}}
+								</div>
+								<div class="modal-footer">
+									{% if post.uid == uid %}
+									<button type="button" class="btn btn-sm btn-outline-secondary"
+										onclick="deleteButton({{post.postnum}})">삭제</button>
+									<button type="button" class="btn btn-sm btn-outline-secondary"
+										onclick="updateButton({{post.postnum}},'{{category}}')">수정</button>
+									{% endif %}
 								</div>
 							</div>
 						</div>

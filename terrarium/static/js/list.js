@@ -1,22 +1,21 @@
-function updateButton(postnum, category, uid) {
+function updateButton(postnum, category) {
   location.href =
-    "../updatepage" +
-    "?category=" +
-    category +
-    "&postnum=" +
-    postnum +
-    "&uid=" +
-    uid;
+    "../updatepage" + "?category=" + category + "&postnum=" + postnum;
 }
 
-function myPage(uid) {
-  location.href = "../mypage?uid=" + uid;
+function deleteButton(postnum) {
+  location.href =
+    "../updatepage" + "?category=" + category + "&postnum=" + postnum;
 }
 
-function goBack(uid) {
-  location.href = "../?uid=" + uid;
+function myPage() {
+  location.href = "../mypage";
+}
+
+function goBack() {
+  location.href = "../";
 }
 
 function uploadButton(category, uid) {
-  location.href = "../uploadpage?uid=" + uid + "&category=" + category;
+  location.href = "../uploadpage?category=" + category;
 }

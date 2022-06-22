@@ -98,19 +98,20 @@ def check_dup():
 # 게시판 C,U
 @app.route('/uploadpage')
 def load_uploadPage():
-    category_dict = request.args.to_dict()
-    return render_template("uploadpage.html",category = category_dict["category"])
+    args_dict = request.args.to_dict()
+    return render_template("uploadpage.html",category = args_dict["category"])
 
 @app.route('/updatepage')
 def load_updatePage():
-    return render_template("updatepage.html", uid='bsc')
+    uid = request.cookies.get('uid')
+    return render_template("updatepage.html", uid=uid)
 
 
 @app.route("/detail", methods=["GET"])
 def get_post():
-    postnum_dict = request.args.to_dict()  # postnum을 dict형태로 가져옴
+    args_dict = request.args.to_dict()  # postnum을 dict형태로 가져옴
     # postnum과 일치하는 post를 db에서 가져옴
-    post = list(db.post.find({'postnum': int(postnum_dict["postnum"])}, {'_id': False, }))
+    post = list(db.post.find({'postnum': int(args_dict["postnum"])}, {'_id': False, }))
     return jsonify({'post': post})
 
 
@@ -129,7 +130,7 @@ def save_post():
         pic = None
 
     post_list = list(db.post.find({}, {'_id': False}))
-    postnum = len(post_list) + 1
+    postnum = post_list[-1]["postnum"] + 1
     doc = {
         'uid': uid,
         'postnum': postnum,
@@ -175,11 +176,9 @@ def fix_post():
 # 목록 전체 조회
 @app.route('/list/<category>')
 def show_list(category):
-    uid_dict = request.args.to_dict()
-    print("hello")
-    print(type(uid_dict["uid"]))
+    uid = request.cookies.get('uid')
     category_posts = list(db.post.find({'category': category}, {'_id': False, 'category': False}))
-    return render_template("list.html", category=category, posts=category_posts, uid=uid_dict["uid"])
+    return render_template("list.html", category=category, posts=category_posts, uid=uid)
 
 
 # 마이페이지

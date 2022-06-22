@@ -1,3 +1,17 @@
+function getCookie(cName) {
+  cName = cName + "=";
+  var cookieData = document.cookie;
+  var start = cookieData.indexOf(cName);
+  var cValue = "";
+  if (start != -1) {
+    start += cName.length;
+    var end = cookieData.indexOf(";", start);
+    if (end == -1) end = cookieData.length;
+    cValue = cookieData.substring(start, end);
+  }
+  return unescape(cValue);
+}
+
 // 이미지 업로드시 썸네일 형식으로 비쳐줌
 function setThumbnail(event) {
   bsCustomFileInput.init();
@@ -13,18 +27,16 @@ function setThumbnail(event) {
 }
 
 // 취소 버튼
-function cancel() {
-  window.location.href("#");
+function cancel(category) {
+  window.location.href("../list/" + category);
 }
 
 // 완료 버튼
 function posting(category) {
-  const URLSearch = new URLSearchParams(location.search);
-  let uid = URLSearch.get("uid");
-
   let title = $("#title").val();
   let pic = $("#pic")[0].files[0];
   let contents = $("#contents").val();
+  let uid = getCookie("uid");
 
   let form_data = new FormData();
   form_data.append("uid", uid);
@@ -42,7 +54,7 @@ function posting(category) {
     processData: false,
     success: function (response) {
       alert(response["msg"]);
-      location.href = "./list/" + category + "?uid=" + uid; // 완료되면 리스트 항목으로 연결
+      location.href = "./list/" + category; // 완료되면 리스트 항목으로 연결
     },
   });
 }
