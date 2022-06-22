@@ -31,17 +31,13 @@
 	<link rel="stylesheet" type="text/css" href="../static/css/indexcss.css">
 
 
-<<<<<<< HEAD
+
     <script>
         function sign_out() {
             $.removeCookie('mytoken', {path: '/'});
             alert('로그아웃!')
             window.location.href = "login"
         }
-
-        function go_mypage() {
-        }
-
 
     </script>
 
@@ -110,36 +106,4 @@
             </div>
         </a>
 </div>
-=======
-	<script>
-		function sign_out() {
-			$.removeCookie('mytoken', { path: '/' });
-			alert('로그아웃!')
-			window.location.href = "login"
-		}
-	</script>
-
-</head>
-
-<body>
-	<nav class="navbar is-fixed-top is-white" role="navigation" aria-label="main navigation">
-		<div class="navbar-brand">
-			<a class="navbar-item" href="/">
-				<img src="{{ url_for('static', filename='images/logo/logo.png') }}">
-				<strong style="font-family: 'pretendard', sans-serif;font-size: larger;">TERRIUM</strong>
-			</a>
-		</div>
-
-		<section class="nvi_bar">
-			<div class="container">
-				<h2 class="subtitle">
-					<button onclick="sign_out()" class="button is-success is-outlined" id="posting-btn">Logout</button>
-				</h2>
-			</div>
-		</section>
-	</nav>
-
->>>>>>> 4975716b4927df27520d988481e30f216d6108fe
-</body>
-
 </html>
