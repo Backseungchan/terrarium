@@ -16,12 +16,13 @@ app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 ca = certifi.where()  # mongodb 보안 문제로 추가
 
 # 철호님 DB
-# client = MongoClient('mongodb+srv://test:sparta@cluster0.ihwyd.mongodb.net/Cluster0?retryWrites=true&w=majority',
-#                      tlsCAFile=ca)
-# db = client.dbsparta
-
-client = MongoClient('mongodb+srv://test:sparta@cluster0.stpfk.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
+client = MongoClient('mongodb+srv://test:sparta@cluster0.ihwyd.mongodb.net/Cluster0?retryWrites=true&w=majority',
+                     tlsCAFile=ca)
 db = client.dbsparta
+
+# 지민 db
+# client = MongoClient('mongodb+srv://test:sparta@cluster0.stpfk.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
+# db = client.dbsparta
 
 
 
