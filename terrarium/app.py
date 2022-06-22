@@ -16,8 +16,7 @@ app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 ca = certifi.where()  # mongodb 보안 문제로 추가
 
 # 철호님 DB
-client = MongoClient('mongodb+srv://test:sparta@cluster0.ihwyd.mongodb.net/Cluster0?retryWrites=true&w=majority',
-                     tlsCAFile=ca)
+client = MongoClient('mongodb+srv://test:sparta@cluster0.ihwyd.mongodb.net/Cluster0?retryWrites=true&w=majority', tlsCAFile=ca)
 db = client.dbsparta
 
 # 지민 db
@@ -55,7 +54,6 @@ def sign_in():
     # 로그인
     uid_receive = request.form['uid_give']
     password_receive = request.form['password_give']
-    is_quit_receive = request.form['is_quit_give']
 
     # PW 암호화
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
@@ -88,7 +86,7 @@ def sign_up():
     birthmm_receive = request.form['birthmm_give']
     birthdd_receive = request.form['birthdd_give']
     nickname_receive = request.form['nickname_give']
-    is_quit_receive = request.form['is_quit_give']
+
     password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     doc = {
         "uid": uid_receive,  # 아이디
@@ -96,8 +94,8 @@ def sign_up():
         "nickname": nickname_receive,  # 닉네임
         "birthyy": birthyy_receive,  # 출생년도
         "birthmm": birthmm_receive,  # 출생월
-        "birthdd": birthdd_receive,  # 출생일
-        "is_quit": is_quit_receive
+        "birthdd": birthdd_receive  # 출생일
+
     }
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
