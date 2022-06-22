@@ -42,7 +42,7 @@ function posting(category) {
     processData: false,
     success: function (response) {
       alert(response["msg"]);
-      location.href = "./list/" + category; // 완료되면 리스트 항목으로 연결
+      location.href = "./list/" + category + "?uid=" + uid; // 완료되면 리스트 항목으로 연결
     },
   });
 }

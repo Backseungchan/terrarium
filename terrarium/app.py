@@ -1,6 +1,5 @@
 from unicodedata import category
 import certifi
-import json
 from pymongo import MongoClient
 import jwt
 import datetime
@@ -15,15 +14,10 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
 ca = certifi.where()  # mongodb 보안 문제로 추가
-#승찬님 DB	
-# client = MongoClient(
-#     'mongodb+srv://test:sparta@cluster0.m0wkc.mongodb.net/Cluster0?retryWrites=true&w=majority', tlsCAFile=ca)
-# db = client.dbsparta
-#희정님 DB
-# client = MongoClient('mongodb+srv://test:sparta@cluster0.cdgld5e.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
-# db = client.terrarium
-#철호님 DB
-client = MongoClient('mongodb+srv://test:sparta@cluster0.ihwyd.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
+
+# 철호님 DB
+client = MongoClient('mongodb+srv://test:sparta@cluster0.ihwyd.mongodb.net/Cluster0?retryWrites=true&w=majority',
+                     tlsCAFile=ca)
 db = client.dbsparta
 
 SECRET_KEY = 'SPARTA'
@@ -51,20 +45,23 @@ def login():
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
     # 로그인
-    username_receive = request.form['username_give']
+    uid_receive = request.form['uid_give']
     password_receive = request.form['password_give']
 
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
-    result = db.users.find_one({'username': username_receive, 'password': pw_hash})
+    result = db.users.find_one({'uid': uid_receive, 'password': pw_hash})
 
     if result is not None:
         payload = {
-            'id': username_receive,
+            'id': uid_receive,
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 1일 유지
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
 
-        return jsonify({'result': 'success', 'token': token})
+        return jsonify({'result': 'success', 'token': token, 'uid':uid_receive})
+
+    # elif "is_quit" in data == 1 :
+
     # 찾지 못하면
     else:
         return jsonify({'result': 'fail', 'msg': '존재하지 않는 아이디거나 비밀번호가 일치하지 않습니다.'})
@@ -72,7 +69,7 @@ def sign_in():
 
 @app.route('/sign_up/save', methods=['POST'])
 def sign_up():
-    username_receive = request.form['username_give']
+    uid_receive = request.form['uid_give']
     password_receive = request.form['password_give']
     birthyy_receive = request.form['birthyy_give']
     birthmm_receive = request.form['birthmm_give']
@@ -80,7 +77,7 @@ def sign_up():
     nickname_receive = request.form['nickname_give']
     password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     doc = {
-        "username": username_receive,  # 아이디
+        "uid": uid_receive,  # 아이디
         "password": password_hash,  # 비밀번호
         "nickname": nickname_receive,  # 닉네임
         "birthyy": birthyy_receive,  # 출생년도
@@ -93,25 +90,29 @@ def sign_up():
 
 @app.route('/sign_up/check_dup', methods=['POST'])
 def check_dup():
-    username_receive = request.form['username_give']
-    exists = bool(db.users.find_one({"username": username_receive}))
+    uid_receive = request.form['uid_give']
+    exists = bool(db.users.find_one({"uid": uid_receive}))
     return jsonify({'result': 'success', 'exists': exists})
+
 
 # 게시판 C,U
 @app.route('/uploadpage')
 def load_uploadPage():
-    return render_template("uploadpage.html",category = "info")
+    category_dict = request.args.to_dict()
+    return render_template("uploadpage.html",category = category_dict["category"])
 
 @app.route('/updatepage')
 def load_updatePage():
-    return render_template("updatepage.html",uid='bsc')
+    return render_template("updatepage.html", uid='bsc')
+
 
 @app.route("/detail", methods=["GET"])
 def get_post():
-    postnum_dict = request.args.to_dict() #postnum을 dict형태로 가져옴
-	#postnum과 일치하는 post를 db에서 가져옴
-    post = list(db.post.find({'postnum': int(postnum_dict["postnum"])}, {'_id': False,}))
+    postnum_dict = request.args.to_dict()  # postnum을 dict형태로 가져옴
+    # postnum과 일치하는 post를 db에서 가져옴
+    post = list(db.post.find({'postnum': int(postnum_dict["postnum"])}, {'_id': False, }))
     return jsonify({'post': post})
+
 
 @app.route('/upload', methods=['POST'])
 def save_post():
@@ -121,18 +122,18 @@ def save_post():
     category = request.form['category']
     try:
         pic = request.files["pic"]
-        filename,extension = pic.filename.split('.')  # 파일의 이름, 확장자
-        save_to = f'static/pic/'+pic.filename  # 파일 저장 경로 설정
+        filename, extension = pic.filename.split('.')  # 파일의 이름, 확장자
+        save_to = f'static/pic/' + pic.filename  # 파일 저장 경로 설정
         pic.save(save_to)  # 파일 저장
     except:
         pic = None
 
-    post_list = list(db.post.find({}, {'_id' : False}))
+    post_list = list(db.post.find({}, {'_id': False}))
     postnum = len(post_list) + 1
     doc = {
-        'uid':uid,
-		'postnum':postnum,
-		'category':category,
+        'uid': uid,
+        'postnum': postnum,
+        'category': category,
         'title': title,
         'contents': contents,
     }
@@ -143,15 +144,16 @@ def save_post():
 
     return jsonify({'msg': "저장 성공"})
 
+
 @app.route('/update', methods=['POST'])
 def fix_post():
     postnum = request.form['postnum']
     title = request.form['title']
     contents = request.form['contents']
-    try:	
+    try:
         pic = request.files["pic"]
-        filename,extension = pic.filename.split('.')  # 파일의 이름, 확장자
-        save_to = f'static/pic/'+pic.filename  # 파일 저장 경로 설정
+        filename, extension = pic.filename.split('.')  # 파일의 이름, 확장자
+        save_to = f'static/pic/' + pic.filename  # 파일 저장 경로 설정
         pic.save(save_to)  # 파일 저장
     except:
         pic = None
@@ -163,19 +165,24 @@ def fix_post():
 
     if pic != None:
         doc['pic'] = f'{filename}.{extension}'
-        
+
     print(doc)
-    db.post.update_one({'postnum':int(postnum)}, {'$set':doc})
+    db.post.update_one({'postnum': int(postnum)}, {'$set': doc})
 
     return jsonify({'msg': "수정 성공"})
 
-#목록 전체 조회
+
+# 목록 전체 조회
 @app.route('/list/<category>')
 def show_list(category):
-    category_posts = list(db.post.find({'category': category}, {'_id': False,'category':False}))
-    return render_template("list.html", category=category, posts=category_posts, uid='bsc')
+    uid_dict = request.args.to_dict()
+    print("hello")
+    print(type(uid_dict["uid"]))
+    category_posts = list(db.post.find({'category': category}, {'_id': False, 'category': False}))
+    return render_template("list.html", category=category, posts=category_posts, uid=uid_dict["uid"])
 
-#마이페이지
+
+# 마이페이지
 @app.route('/mypage')
 def mypage_pw():
     return render_template("mypage.html", page="mypage_pwconfirm")
