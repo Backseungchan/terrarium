@@ -1,3 +1,4 @@
+from unicodedata import category
 import certifi
 import json
 from pymongo import MongoClient
@@ -11,11 +12,25 @@ ca = certifi.where()  # mongodb 보안 문제로 추가
 client = MongoClient(
     'mongodb+srv://test:sparta@cluster0.m0wkc.mongodb.net/Cluster0?retryWrites=true&w=majority', tlsCAFile=ca)
 db = client.dbsparta
+#희정님 DB
+# client = MongoClient('mongodb+srv://test:sparta@cluster0.cdgld5e.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
+# db = client.terrarium
+#철호님 DB
+# client = MongoClient('mongodb+srv://test:sparta@cluster0.ihwyd.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
+# db = client.dbsparta
 
 @app.route('/')
 def main():
-    return render_template("update.html")
-	# return render_template("upload.html") #테스트를 위한 주석
+    return render_template("index.html")
+
+# 게시한 C,U
+@app.route('/uploadpage')
+def load_uploadPage():
+    return render_template("uploadpage.html",userid = 'bsc',category = category_dict[category])
+
+@app.route('/updatepage')
+def load_updatePage():
+    return render_template("updatepage.html",userid='bsc')
 
 @app.route("/detail", methods=["GET"])
 def get_post():
@@ -26,13 +41,14 @@ def get_post():
 
 @app.route('/upload', methods=['POST'])
 def save_post():
+    userid = request.form['userid']
     title = request.form['title']
     contents = request.form['contents']
     category = request.form['category']
     try:
         pic = request.files["pic"]
         filename,extension = pic.filename.split('.')  # 파일의 이름, 확장자
-        save_to = f'static/'+pic.filename  # 파일 저장 경로 설정
+        save_to = f'static/pic/'+pic.filename  # 파일 저장 경로 설정
         pic.save(save_to)  # 파일 저장
     except:
         pic = None
@@ -40,6 +56,7 @@ def save_post():
     post_list = list(db.post.find({}, {'_id' : False}))
     postnum = len(post_list) + 1
     doc = {
+        'userid':userid,
 		'postnum':postnum,
 		'category':category,
         'title': title,
@@ -60,7 +77,7 @@ def fix_post():
     try:	
         pic = request.files["pic"]
         filename,extension = pic.filename.split('.')  # 파일의 이름, 확장자
-        save_to = f'static/'+pic.filename  # 파일 저장 경로 설정
+        save_to = f'static/pic/'+pic.filename  # 파일 저장 경로 설정
         pic.save(save_to)  # 파일 저장
     except:
         pic = None
@@ -78,6 +95,13 @@ def fix_post():
 
     return jsonify({'msg': "수정 성공"})
 
+#목록 전체 조회
+@app.route('/list/<category>')
+def show_list(category):
+    category_posts = list(db.post.find({'category': category}, {'_id': False,'category':False}))
+    return render_template("list.html", category=category, posts=category_posts, userid='bsc')
+
+#마이페이지
 @app.route('/mypage')
 def mypage_pw():
     return render_template("mypage.html", page="mypage_pwconfirm")
