@@ -23,7 +23,6 @@ function sign_in() {
         data: {
             uid_give: uid,
             password_give: password,
-            is_quit_give: is_quit
         },
         success: function (response) {
             if (response['result'] == 'success') {
@@ -118,19 +117,19 @@ function sign_up() {
         }
     });
 
-function toggle_sign_up() {
-    $("#sign-up-box").toggleClass("is-hidden")
-    $("#div-sign-in-or-up").toggleClass("is-hidden")
-    $("#btn-check-dup").toggleClass("is-hidden")
-    $("#help-id").toggleClass("is-hidden")
-    $("#help-password").toggleClass("is-hidden")
-    $("#help-password2").toggleClass("is-hidden")
-    $("#help-nickname").toggleClass("is-hidden")
-    $("#help-yymmdd").toggleClass("is-hidden")
-    $("#help-yy").toggleClass("is-hidden")
-    $("#help-mm").toggleClass("is-hidden")
-    $("#help-dd").toggleClass("is-hidden")
-}
+    function toggle_sign_up() {
+        $("#sign-up-box").toggleClass("is-hidden")
+        $("#div-sign-in-or-up").toggleClass("is-hidden")
+        $("#btn-check-dup").toggleClass("is-hidden")
+        $("#help-id").toggleClass("is-hidden")
+        $("#help-password").toggleClass("is-hidden")
+        $("#help-password2").toggleClass("is-hidden")
+        $("#help-yymmdd").toggleClass("is-hidden")
+        $("#help-yy").toggleClass("is-hidden")
+        $("#help-mm").toggleClass("is-hidden")
+        $("#help-dd").toggleClass("is-hidden")
+        $("#help-gender").toggleClass("is-hidden")
+    }
 
     function is_nickname(asValue) {
         var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
