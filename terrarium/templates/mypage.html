@@ -2,107 +2,24 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<title>🌿Terrarium</title>
-	<!-- og 태그-->
-	<meta property="og:title" content="🌿Terrarium - 테라리움">
-	<meta property="og:image" content="/og_image.jpg">
-	<meta property="og:description" content="잘 키운 반려식물 열 반려동물 안부럽다? 내가 키운 식물로 재테크 까지 모든 건 테라리움에서~">
-	<!-- jQuery 로드 -->
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<!-- 부트스트랩 CSS 로드 -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-		integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-	<!-- 부트스트랩 Javascript(애니메이션 등에 사용됨) 로드 -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
-		crossorigin="anonymous"></script>
-	<!-- 테마 CSS 로드(지금은 폰트만 있는 상태, theme.css 수정 시 주석도 수정해주세요) -->
-	<link rel="stylesheet" href="../static/theme.css">
-
-	<style>
-		/*Sidebar 포함 전체 박스*/
-		.container {
-			height: 100vh;
-			padding: 0;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
-
-		/*Sidebar*/
-		.sidebar-container {}
-
-		/*Sidebar 제외한 오른쪽 박스*/
-		.right-box {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: flex-start;
-			flex-basis: auto;
-			height: 100%;
-			overflow: auto;
-		}
-
-		/*right-box 안에 있는 컨텐츠 카드*/
-		.content-box {
-			margin-left: 10px;
-			margin-right: 10px;
-			box-shadow: 3px 3px 10px #e0e0e0;
-			border-radius: 10px;
-			padding: 30px;
-			/*padding-left: 50px;*/
-			width: 1000px;
-			max-height: 90%;
-			height: 90%;
-			overflow: auto;
-
-			/*스크롤바 모양만 지우고 기능은 가능하게*/
-			scrollbar-width: none;
-			/* Firefox */
-			-ms-overflow-style: none;
-			/* Internet Explorer 10+ */
-		}
-
-		/*스크롤바 모양만 지우고 기능은 가능하게*/
-		.content-box::-webkit-scrollbar {
-			/* WebKit */
-			width: 0;
-			height: 0;
-		}
-
-		/*회색 가로 구분선*/
-		.divider {
-			height: 1px;
-			width: 100%;
-			/*background-color: #e0e0e0;*/
-			/*background-color: gray;*/
-			margin-top: 10px;
-			margin-bottom: 10px;
-		}
-
-		/*제목*/
-		.tags {
-			padding: 5px;
-			/*background-color: #e8f4ea;*/
-			width: fit-content;
-			margin-top: 20px;
-			/*color: white;*/
-		}
-
-		/*확인 버튼*/
-		.confirm-button {
-			margin-top: 10px;
-		}
-
-		/*페이지네이션 컨테이너*/
-		.navigation-box {
-			margin-top: 50px;
-			display: flex;
-			justify-content: center;
-			text-align: center;
-		}
-	</style>
+    <meta charset="UTF-8">
+    <title>🌿Terrarium</title>
+    <!-- og 태그-->
+    <meta property="og:title" content="🌿Terrarium - 테라리움">
+    <meta property="og:image" content="/og_image.jpg">
+    <meta property="og:description" content="잘 키운 반려식물 열 반려동물 안부럽다? 내가 키운 식물로 재테크 까지 모든 건 테라리움에서~">
+    <!-- jQuery 로드 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- 부트스트랩 CSS 로드 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <!-- 부트스트랩 Javascript(애니메이션 등에 사용됨) 로드 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+            crossorigin="anonymous"></script>
+    <!-- 테마 CSS 로드(지금은 폰트만 있는 상태, theme.css 수정 시 주석도 수정해주세요) -->
+    <link rel="stylesheet" href="../static/theme.css">
+    <link rel="stylesheet" href="../static/css/mypage.css">
 
 	<script>
 
@@ -124,105 +41,171 @@
 			$("#" + page).removeClass("link-dark")
 		})
 
-		// 비밀번호 확인 버튼 눌렀을 때 작동하는 함수
-		function confirm_password() {
-			window.location.href = "/mypage/home"
-			// $.ajax({
-			//         type: "GET",
-			//         url: "/confirm_password",
-			//         data: {},
-			//         cache: false,
-			//         contentType: false,
-			//         processData: false,
-			//         success: function (response) {
-			//             if (response["result"] == "success") {
-			//                 alert(response["msg"])
-			//                 window.location.reload()
-			//
-			//             }
-			//         }
-			//     });
-		}
-	</script>
+        function is_password(asValue) {
+            var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
+            return regExp.test(asValue);
+        }
+
+        function toggle_pw_field(){
+            $(".pw-field").toggleClass("d-none")
+        }
+
+        // 비밀번호 확인 버튼 눌렀을 때 작동하는 함수
+        function confirm_password(uid) {
+            let password = $("#check-password").val()
+            console.log(uid, password)
+            $.ajax({
+                type: "POST",
+                url: "/pwcheck",
+                data: {
+                    uid_give: uid,
+                    password_give: password
+                },
+                success: function (response) {
+                    if(response["status"] == "success"){
+                        window.location.href = "/mypage/home?uid=" + uid
+                    }else{
+                        alert("비밀번호가 일치하지 않습니다.")
+                    }
+                }
+            });
+        }
+
+        // 비밀번호 변경
+        function change_password(uid) {
+            let password = $("#input-password").val()
+            let password2 = $("#input-password2").val()
+
+            if (password == "") {
+                $("#help-password").text("비밀번호를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
+                $("#input-password").focus()
+                return;
+            } else if (!is_password(password)) {
+                $("#help-password").text("비밀번호의 형식을 확인해주세요. 영문과 숫자 필수 포함, 특수문자(!@#$%^&*) 사용가능 8-20자").removeClass("is-safe").addClass("is-danger")
+                $("#input-password").focus()
+                return
+            } else {
+                $("#help-password").text("사용할 수 있는 비밀번호입니다.").removeClass("is-danger").addClass("is-success")
+            }
+            if (password2 == "") {
+                $("#help-password2").text("비밀번호를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
+                $("#input-password2").focus()
+                return;
+            } else if (password2 != password) {
+                $("#help-password2").text("비밀번호가 일치하지 않습니다.").removeClass("is-safe").addClass("is-danger")
+                $("#input-password2").focus()
+                return;
+            } else {
+                $("#help-password2").text("비밀번호가 일치합니다.").removeClass("is-danger").addClass("is-success")
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/mypage/pwchange",
+                data: {
+                    id_give: uid,
+                    password_give: password,
+                },
+                success: function () {
+                    alert("비밀번호가 성공적으로 변경되었습니다.")
+                    window.location.reload()
+                }
+            });
+        }
+
+        // 회원 탈퇴 버튼
+        function quit(uid) {
+            if (confirm("회원을 탈퇴하시겠습니까?")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/quit",
+                    data: {id_give: uid},
+                    success: function () {
+                        alert("탈퇴가 완료되었습니다.")
+                        window.location.href("/login")
+                    }
+                })
+            }
+        }
+    </script>
 </head>
 
 <body>
-	<div class="container d-flex flex-nowrap">
-		<div>
-			<!-- 부트스트랩 Sidebar -->
-			<div class="d-flex flex-column flex-shrink-0 p-3 bg-white sidebar-container" style="width: 280px;">
-				<a href="/mypage"
-					class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-					<svg class="bi pe-none me-2" width="40" height="32">
-						<use xlink:href="#bootstrap" />
-					</svg>
-					<span class="fs-4">마이페이지</span>
-				</a>
-				<hr>
-				<ul class="nav nav-pills flex-column mb-auto">
-					{% if page == "mypage_pwconfirm" %}
-					<li class="nav-item">
-						<a href="/mypage" class="nav-link" aria-current="page">
-							<svg class="bi pe-none me-2" width="16" height="16">
-								<!--                        <use xlink:href="#home"/>-->
-							</svg>
-							비밀번호 재확인
-						</a>
-					</li>
-					{% else %}
-					<li class="nav-item">
-						<a href="/mypage/home" id="home" class="nav-link" aria-current="page">
-							<svg class="bi pe-none me-2" width="16" height="16">
-								<!--                        <use xlink:href="#home"/>-->
-							</svg>
-							마이페이지 홈
-						</a>
-					</li>
-					<li>
-						<a href="/mypage/info" id="info" class="nav-link link-dark">
-							<svg class="bi pe-none me-2" width="16" height="16">
-								<!--                        <use xlink:href="#speedometer2"/>-->
-							</svg>
-							내 정보
-						</a>
-					</li>
-					<li>
-						<a href="/mypage/posts" id="posts" class="nav-link link-dark">
-							<svg class="bi pe-none me-2" width="16" height="16">
-								<!--                        <use xlink:href="#table"/>-->
-							</svg>
-							작성한 게시글
-						</a>
-					</li>
-					<li>
-						<a href="/mypage/replies" id="replies" class="nav-link link-dark">
-							<svg class="bi pe-none me-2" width="16" height="16">
-								<!--                        <use xlink:href="#grid"/>-->
-							</svg>
-							작성한 댓글
-						</a>
-					</li>
-					{% endif %}
-				</ul>
-				<hr>
-				<div class="dropdown">
-					<a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
-						id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-						<img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-						<strong>mdo</strong>
-					</a>
-					<ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-						<li><a class="dropdown-item" href="#">New project...</a></li>
-						<li><a class="dropdown-item" href="#">Settings</a></li>
-						<li><a class="dropdown-item" href="#">Profile</a></li>
-						<li>
-							<hr class="dropdown-divider">
-						</li>
-						<li><a class="dropdown-item" href="#">Sign out</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
+<div class="container d-flex flex-nowrap">
+    <div>
+        <!-- 부트스트랩 Sidebar -->
+        <div class="d-flex flex-column flex-shrink-0 p-3 bg-white sidebar-container" style="width: 280px;">
+            <a href="/mypage?uid={{uid}}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+                <svg class="bi pe-none me-2" width="40" height="32">
+                    <use xlink:href="#bootstrap"/>
+                </svg>
+                <span class="fs-4">마이페이지</span>
+            </a>
+            <hr>
+            <ul class="nav nav-pills flex-column mb-auto">
+                {% if page == "mypage_pwconfirm" %}
+                <li class="nav-item">
+                    <a href="/mypage" class="nav-link" aria-current="page">
+                        <svg class="bi pe-none me-2" width="16" height="16">
+                            <!--                        <use xlink:href="#home"/>-->
+                        </svg>
+                        비밀번호 재확인
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a href="/mypage/home?uid={{uid}}" id="home" class="nav-link" aria-current="page">
+                        <svg class="bi pe-none me-2" width="16" height="16">
+                            <!--                        <use xlink:href="#home"/>-->
+                        </svg>
+                        마이페이지 홈
+                    </a>
+                </li>
+                <li>
+                    <a href="/mypage/info?uid={{uid}}" id="info" class="nav-link link-dark">
+                        <svg class="bi pe-none me-2" width="16" height="16">
+                            <!--                        <use xlink:href="#speedometer2"/>-->
+                        </svg>
+                        내 정보
+                    </a>
+                </li>
+                <li>
+                    <a href="/mypage/posts?uid={{uid}}" id="posts" class="nav-link link-dark">
+                        <svg class="bi pe-none me-2" width="16" height="16">
+                            <!--                        <use xlink:href="#table"/>-->
+                        </svg>
+                        작성한 게시글
+                    </a>
+                </li>
+                <li>
+                    <a href="/mypage/replies?uid={{uid}}" id="replies" class="nav-link link-dark">
+                        <svg class="bi pe-none me-2" width="16" height="16">
+                            <!--                        <use xlink:href="#grid"/>-->
+                        </svg>
+                        작성한 댓글
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+            <hr>
+<!--            <div class="dropdown">-->
+<!--                <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"-->
+<!--                   id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">-->
+<!--                    <strong>mdo</strong>-->
+<!--                </a>-->
+<!--                <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">-->
+<!--                    <li><a class="dropdown-item" href="#">New project...</a></li>-->
+<!--                    <li><a class="dropdown-item" href="#">Settings</a></li>-->
+<!--                    <li><a class="dropdown-item" href="#">Profile</a></li>-->
+<!--                    <li>-->
+<!--                        <hr class="dropdown-divider">-->
+<!--                    </li>-->
+<!--                    <li><a class="dropdown-item" href="#">Sign out</a></li>-->
+<!--                </ul>-->
+<!--            </div>-->
+        </div>
+    </div>
 
 		<!-- Sidebar 오른쪽 내용 박스-->
 		<div class="right-box">
@@ -231,159 +214,186 @@
 				<!-- app.py에서 받아온 page 파라미터가 무엇이냐에 따라 페이지를 다르게 출력. 아래의 if page 모두 동일.-->
 				<!-- 문법은 Jinja-->
 
-				<!--            ----------------------------------------비밀번호 확인----------------------------------------              -->
-				{% if page == "mypage_pwconfirm" %}
-				<h3>비밀번호 재확인</h3>
-				<div class="divider"></div>
-				<p>비밀번호를 입력해주세요.</p>
-				<div class="form-floating" style="width: 300px;">
-					<input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-					<label for="floatingPassword">Password</label>
-				</div>
-				<button onclick="confirm_password()" type="button" class="confirm-button btn btn-primary">확인</button>
-				{% endif %}
+            <!--            ----------------------------------------비밀번호 확인----------------------------------------              -->
+            {% if page == "mypage_pwconfirm" %}
+            <h3>비밀번호 재확인</h3>
+            <div class="divider"></div>
+            <p>비밀번호를 입력해주세요.</p>
+            <div class="form-floating" style="width: 300px;">
+                <input type="password" class="form-control" id="check-password" placeholder="Password">
+                <label for="check-password">Password</label>
+            </div>
+            <button onclick="confirm_password('{{uid}}')" type="button" class="confirm-button btn btn-primary">확인</button>
+            {% endif %}
 
-				<!--            ----------------------------------------마이페이지 홈----------------------------------------              -->
-				{% if page == "home" %}
-				<div>
-					<h3>마이페이지 홈</h3>
-					<div class="divider"></div>
-					<h4 class="tags">최근 작성한 게시글</h4>
-					<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-						<!--                    작성 게시물 중 최근 3건을 슬라이싱. DB 연결 이후 api단에서 해결하는 것으로 수정.-->
-						{% for post in posts.posts[0:3] %}
-						<div class="col">
-							<div class="card shadow-sm">
-								<div class="card-img-top"
-									style="height: 255px; background-image: url({{ post.pic }}); background-size: cover;">
-								</div>
+            <!--            ----------------------------------------마이페이지 홈----------------------------------------              -->
+            {% if page == "home" %}
+            <div>
+                <h3>마이페이지 홈</h3>
+                <div class="divider"></div>
+                <h4 class="tags">최근 작성한 게시글</h4>
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    {% for post in data.recent_posts %}
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <div class="card-img-top"
+                                 style="height: 255px; background-image: url({{ post.pic }}); background-size: cover;">
+                            </div>
 
-								<div class="card-body">
-									<h4>{{ post.title }}</h4>
-									<p class="card-text">{{ post.contents }}</p>
-									<div class="d-flex justify-content-between align-items-center">
-										<div class="btn-group">
-											<button type="button" class="btn btn-sm btn-outline-secondary">바로가기</button>
-											<button type="button" class="btn btn-sm btn-outline-secondary">수정하기</button>
-										</div>
-										<small class="text-muted">9 mins</small>
-									</div>
-								</div>
-							</div>
-						</div>
-						{% endfor %}
-					</div>
+                            <div class="card-body">
+                                <h4>{{ post.title }}</h4>
+                                <p class="card-text">{{ post.contents }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">바로가기</button>
+                                        <!--                                        <button type="button" class="btn btn-sm btn-outline-secondary">수정하기</button>-->
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
 
-					<h4 class="tags">최근 작성한 댓글</h4>
-					<ul class="list-group">
-						{% for reply in replies.replies[0:3] %}
-						<li class="list-group-item">
-							<p>{{ reply.text }}</p>
-							<a href="/{{ reply.postnum }}"><strong>게시글 : </strong>{{ reply.title }}</a>
-						</li>
-						{% endfor %}
-					</ul>
-				</div>
-				{% endif %}
+                <h4 class="tags">최근 작성한 댓글</h4>
+                <ul class="list-group">
+                    {% for post in data.recent_replies %}
+                    <li class="list-group-item">
+                        <p>{{ post.replies.text }}</p>
+                        <a href="/{{ post.postnum }}"><strong>게시글 : </strong>{{ post.title }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
 
-				<!--            ----------------------------------------내 정보----------------------------------------              -->
-				{% if page == "info" %}
-				<div>
-					<h3>내 정보</h3>
-					<div class="divider"></div>
-					<h6 class="tags">ID</h6>
-					<p>somethingid</p>
-					<h6 class="tags">생년월일</h6>
-					<p>20220621</p>
-					<h6 class="tags">비밀번호 변경</h6>
-					<button type="button" class="btn btn-outline-success">비밀번호 변경하기</button>
-				</div>
-				{% endif %}
+            <!--            ----------------------------------------내 정보----------------------------------------              -->
+            {% if page == "info" %}
+            <div>
+                <h3>내 정보</h3>
+                <div class="divider"></div>
+                <h6 class="tags">ID</h6>
+                <p>{{ uid }}</p>
+                <h6 class="tags">닉네임</h6>
+                <p>{{ data.nickname }}</p>
+                <h6 class="tags">생년월일</h6>
+                <p>{{ data.birthyy +"-"+ data.birthmm +"-"+ data.birthdd }}</p>
 
-				<!--            ----------------------------------------작성한 게시글----------------------------------------              -->
-				{% if page == "posts" %}
-				<div>
-					<h3>작성한 게시글</h3>
-					<div class="divider"></div>
-					<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-						{% for post in posts.posts %}
-						<div class="col">
-							<div class="card shadow-sm">
-								<div class="card-img-top"
-									style="height: 255px; background-image: url({{ post.pic }}); background-size: cover;">
-								</div>
+                <h6 class="tags">비밀번호 변경</h6>
+                <button onclick="toggle_pw_field()" type="button" class="btn btn-outline-success pw-field">비밀번호 변경하기
+                </button>
 
-								<div class="card-body">
-									<h4>{{ post.title }}</h4>
-									<p class="card-text">{{ post.contents }}</p>
-									<div class="d-flex justify-content-between align-items-center">
-										<div class="btn-group">
-											<button type="button" class="btn btn-sm btn-outline-secondary">바로가기</button>
-											<button type="button" class="btn btn-sm btn-outline-secondary">수정하기</button>
-										</div>
-										<small class="text-muted">9 mins</small>
-									</div>
-								</div>
-							</div>
-						</div>
-						{% endfor %}
-					</div>
-					<div class="navigation-box">
-						<nav aria-label="Page navigation example">
-							<ul class="pagination">
-								<li class="page-item">
-									<a class="page-link" href="#" aria-label="Previous">
-										<span aria-hidden="true">&laquo;</span>
-									</a>
-								</li>
-								<li class="page-item"><a class="page-link" href="#">1</a></li>
-								<li class="page-item"><a class="page-link" href="#">2</a></li>
-								<li class="page-item"><a class="page-link" href="#">3</a></li>
-								<li class="page-item">
-									<a class="page-link" href="#" aria-label="Next">
-										<span aria-hidden="true">&raquo;</span>
-									</a>
-								</li>
-							</ul>
-						</nav>
-					</div>
-				</div>
-				{% endif %}
+                <div class="pw-field d-none">
+                    <div class="control has-icons-left" style="width: 300px;">
+                        <input type="password" class="form-control input pwinput" id="input-password"
+                               placeholder="새 비밀번호 입력">
+                        <!--                        <input id="input-password" class="input" type="password" placeholder="비밀번호">-->
+                        <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                    </div>
+                    <p id="help-password" class="help is-hidden">영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요. 특수문자(!@#$%^&*)도
+                        사용가능합니다.</p>
+                    <div class="control has-icons-left" style="width:300px;">
+                        <input id="input-password2" class="input pwinput form-control" type="password"
+                               placeholder="비밀번호 재입력">
+                        <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                    </div>
+                    <p id="help-password2" class="help is-hidden">비밀번호를 다시 한 번 입력해주세요.</p>
+                    <button onclick="change_password('{{uid}}')" type="button" class="btn btn-outline-success">비밀번호 변경
+                    </button>
+                    <button onclick="toggle_pw_field()" type="button" class="btn btn-outline-secondary">취소
+                    </button>
+                </div>
 
-				<!--            ----------------------------------------작성한 댓글----------------------------------------              -->
-				{% if page == "replies" %}
-				<div>
-					<h3>작성한 댓글</h3>
-					<div class="divider"></div>
-					<ul class="list-group">
-						{% for reply in replies.replies %}
-						<li class="list-group-item">
-							<p>{{ reply.text }}</p>
-							<a href="/{{ reply.postnum }}"><strong>게시글 : </strong>{{ reply.title }}</a>
-						</li>
-						{% endfor %}
-					</ul>
-					<div class="navigation-box">
-						<nav aria-label="Page navigation example">
-							<ul class="pagination">
-								<li class="page-item">
-									<a class="page-link" href="#" aria-label="Previous">
-										<span aria-hidden="true">&laquo;</span>
-									</a>
-								</li>
-								<li class="page-item"><a class="page-link" href="#">1</a></li>
-								<li class="page-item"><a class="page-link" href="#">2</a></li>
-								<li class="page-item"><a class="page-link" href="#">3</a></li>
-								<li class="page-item">
-									<a class="page-link" href="#" aria-label="Next">
-										<span aria-hidden="true">&raquo;</span>
-									</a>
-								</li>
-							</ul>
-						</nav>
-					</div>
-				</div>
-				{% endif %}
+                <button onclick="quit({{uid}})" type="button" class="btn btn-outline-secondary btn-sm quit_button">회원 탈퇴
+                </button>
+            </div>
+            {% endif %}
+
+            <!--            ----------------------------------------작성한 게시글----------------------------------------              -->
+            {% if page == "posts" %}
+            <div>
+                <h3>작성한 게시글</h3>
+                <div class="divider"></div>
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                    {% for post in data.posts %}
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <div class="card-img-top"
+                                 style="height: 255px; background-image: url({{ post.pic }}); background-size: cover;">
+                            </div>
+
+                            <div class="card-body">
+                                <h4>{{ post.title }}</h4>
+                                <p class="card-text">{{ post.contents }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">바로가기</button>
+                                        <!--                                        <button type="button" class="btn btn-sm btn-outline-secondary">수정하기</button>-->
+                                    </div>
+                                    <small class="text-muted">9 mins</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+<!--                <div class="navigation-box">-->
+<!--                    <nav aria-label="Page navigation example">-->
+<!--                        <ul class="pagination">-->
+<!--                            <li class="page-item">-->
+<!--                                <a class="page-link" href="#" aria-label="Previous">-->
+<!--                                    <span aria-hidden="true">&laquo;</span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+<!--                            <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+<!--                            <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+<!--                            <li class="page-item">-->
+<!--                                <a class="page-link" href="#" aria-label="Next">-->
+<!--                                    <span aria-hidden="true">&raquo;</span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </nav>-->
+<!--                </div>-->
+            </div>
+            {% endif %}
+
+            <!--            ----------------------------------------작성한 댓글----------------------------------------              -->
+            {% if page == "replies" %}
+            <div>
+                <h3>작성한 댓글</h3>
+                <div class="divider"></div>
+                <ul class="list-group">
+                    {% for post in data.replies %}
+                    <li class="list-group-item">
+                        <p>{{ post.replies.text }}</p>
+                        <a href="/{{ post.postnum }}"><strong>게시글 : </strong>{{ post.title }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+<!--                <div class="navigation-box">-->
+<!--                    <nav aria-label="Page navigation example">-->
+<!--                        <ul class="pagination">-->
+<!--                            <li class="page-item">-->
+<!--                                <a class="page-link" href="#" aria-label="Previous">-->
+<!--                                    <span aria-hidden="true">&laquo;</span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li class="page-item"><a class="page-link" href="#">1</a></li>-->
+<!--                            <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+<!--                            <li class="page-item"><a class="page-link" href="#">3</a></li>-->
+<!--                            <li class="page-item">-->
+<!--                                <a class="page-link" href="#" aria-label="Next">-->
+<!--                                    <span aria-hidden="true">&raquo;</span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </nav>-->
+<!--                </div>-->
+            </div>
+            {% endif %}
 
 			</div>
 		</div>

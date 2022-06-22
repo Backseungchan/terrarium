@@ -1,0 +1,95 @@
+/*Sidebar 포함 전체 박스*/
+.container {
+    height: 100vh;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*Sidebar*/
+.sidebar-container {
+}
+
+/*Sidebar 제외한 오른쪽 박스*/
+.right-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    flex-basis: auto;
+    height: 100%;
+    overflow: auto;
+}
+
+/*right-box 안에 있는 컨텐츠 카드*/
+.content-box {
+    margin-left: 10px;
+    margin-right: 10px;
+    box-shadow: 3px 3px 10px #e0e0e0;
+    border-radius: 10px;
+    padding: 30px;
+    /*padding-left: 50px;*/
+    width: 1000px;
+    max-height: 90%;
+    height: 90%;
+    overflow: auto;
+
+    /*스크롤바 모양만 지우고 기능은 가능하게*/
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+/*스크롤바 모양만 지우고 기능은 가능하게*/
+.content-box::-webkit-scrollbar { /* WebKit */
+    width: 0;
+    height: 0;
+}
+
+/*회색 가로 구분선*/
+.divider {
+    height: 1px;
+    width: 100%;
+    /*background-color: #e0e0e0;*/
+    /*background-color: gray;*/
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/*제목*/
+.tags {
+    padding: 5px;
+    /*background-color: #e8f4ea;*/
+    width: fit-content;
+    margin-top: 20px;
+    /*color: white;*/
+}
+
+/*확인 버튼*/
+.confirm-button {
+    margin-top: 10px;
+}
+
+/*페이지네이션 컨테이너*/
+.navigation-box {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.quit_button {
+    margin-top: 100px;
+    display: block;
+}
+
+.help{
+    font-size: small;
+    color: grey;
+}
+.is-success{
+    color: #48C774;
+}
+.is-danger{
+    color: #FF3860;
+}
