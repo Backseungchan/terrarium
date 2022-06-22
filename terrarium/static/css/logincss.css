@@ -13,17 +13,6 @@ body {
     max-width: 750px;
     max-height: 300px;
 }
-
-/*.box {
-
-     background-image: url("https://i.pinimg.com/564x/84/a4/4d/84a44dfd6e18a3e2133808329230bb23.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    margin: 0px;
-
-}*/
-
-
 .section {
     padding: 1rem 1.5rem;
     max-width: 750px;
@@ -33,15 +22,11 @@ body {
 .title {
     font-weight: 800;
     font-size: 5rem;
-
 }
 
 .subtitle {
     font-size: 2rem;
 }
-
-/*----------------------------------*/
-/*각종 버튼들 ex) 중복확인, 회원가입, 취소*/
 
 .button.is-sparta {
     background-color: forestgreen;
@@ -54,11 +39,6 @@ body {
     border-color: forestgreen;
     color: #050000 !important;
 }
-
-
-
-/*----------------------------------*/
-
 
 .help {
     color: black;

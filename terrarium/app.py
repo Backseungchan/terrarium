@@ -1,5 +1,6 @@
 import certifi
 from pymongo import MongoClient
+
 ca = certifi.where()
 import jwt
 import datetime
@@ -9,10 +10,9 @@ from flask import Flask, render_template, jsonify, request, redirect, url_for
 from datetime import datetime, timedelta
 from static.sampledata import posts, replies
 
-
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-# app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
+app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
 SECRET_KEY = 'SPARTA'
 

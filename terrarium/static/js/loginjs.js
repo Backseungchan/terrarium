@@ -1,7 +1,7 @@
 function sign_in() {
+    let username = $("#input-username").val()
+    let password = $("#input-password").val()
 
-    /*let username = $("#input-username").val()
-    let password = $("#input-password").val()*/
 
     if (username == "") {
         $("#help-id-login").text("아이디를 입력해주세요.")
@@ -36,10 +36,6 @@ function sign_in() {
 }
 
 function sign_up() {
-    /*$("#input-username").val("")
-    $("#input-password").val("")*/
-
-
     let username = $("#input-username").val()
     let password = $("#input-password").val()
     let password2 = $("#input-password2").val()
@@ -124,9 +120,6 @@ function sign_up() {
 }
 
 function toggle_sign_up() {
-    /*$("#input-username").val("")
-    $("#input-password").val("")*/
-
     $("#sign-up-box").toggleClass("is-hidden")
     $("#div-sign-in-or-up").toggleClass("is-hidden")
     $("#btn-check-dup").toggleClass("is-hidden")
@@ -171,7 +164,6 @@ function check_dup() {
             username_give: username
         },
         success: function (response) {
-
             if (response["exists"]) {
                 $("#help-id").text("이미 존재하는 아이디입니다.").removeClass("is-safe").addClass("is-danger")
                 $("#input-username").focus()
@@ -179,7 +171,6 @@ function check_dup() {
                 $("#help-id").text("사용할 수 있는 아이디입니다.").removeClass("is-danger").addClass("is-success")
             }
             $("#help-id").removeClass("is-loading")
-
         }
     });
 }
