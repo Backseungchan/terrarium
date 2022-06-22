@@ -15,11 +15,10 @@
 
 와이어프레임
 
-<img src = "https://raw.githubusercontent.com/Backseungchan/terrarium/d91dceb8fce0b59a70f8bdc9c7ce474b66e65a44/%EC%99%80%EC%9D%B4%EC%96%B4%ED%94%84%EB%A0%88%EC%9E%84.svg">
+<img src = "https://raw.githubusercontent.com/Backseungchan/terrarium/8a529fed3d890bf5991b5e5cae5f8a4446a17f7b/wireflame.svg">
 
 
 개발해야 하는 기능들
 
-![api](https://user-images.githubusercontent.com/103014298/174975346-b2a6452a-7c8e-470d-a5c6-6f6370dcda8e.jpg)
-
+<img src = "[https://raw.githubusercontent.com/Backseungchan/terrarium/8a529fed3d890bf5991b5e5cae5f8a4446a17f7b/wireflame.svg](https://github.com/Backseungchan/terrarium/blob/main/api.jpg?raw=true)">
 
