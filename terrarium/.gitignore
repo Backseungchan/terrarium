@@ -12,7 +12,7 @@ venv/
 
 # specify a folder with slash in the end
 # ignore all files in any directory named pic
-pic/
+pic/**
 
 # exclude files
 diagram-export-2022. 6. 20. 오후 3_03_39.svg
