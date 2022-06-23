@@ -315,10 +315,83 @@
 					<h4 class="tags">최근 작성한 댓글</h4>
 					<ul class="list-group">
 						{% for post in data.recent_replies %}
+<!--						<li class="list-group-item">-->
+<!--							<p>{{ post.replies.text }}</p>-->
+<!--							<a href="/{{ post.postnum }}"><strong>게시글 : </strong>{{ post.title }}</a>-->
+<!--						</li>-->
 						<li class="list-group-item">
 							<p>{{ post.replies.text }}</p>
-							<a href="/{{ post.postnum }}"><strong>게시글 : </strong>{{ post.title }}</a>
+<!--							<a href="" data-bs-toggle="modal" data-bs-target="#exampleModal{{post.postnum}}"></a>-->
+							<a href="" data-bs-toggle="modal" data-bs-target="#exampleModal2{{post.postnum}}"><strong>게시글 : </strong>{{ post.title }}</a>
 						</li>
+						<div class="modal fade" id="exampleModal2{{post.postnum}}" tabindex="-1"
+							aria-labelledby="exampleModal2Label" aria-hidden="true">
+							<div class="modal-dialog modal-lg modal-dialog-scrollable">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModal2Label">{{ '제목없음' if post.title == ""
+											else
+											post.title }}</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal"
+											aria-label="Close"></button>
+
+									</div>
+									<div class="card-img-top"
+										style="background-image: url(../static/pic/{{ post.pic }}),url(../static/images/noImage.gif);">
+									</div>
+									<div class="modal-body">
+										<p class="content right-align">작성자 : {{post.nickname}}</p>
+										<p class="content">{{ '내용없음' if post.contents == "" else post.contents}}</p>
+										<ul class="list-group">
+											<li class="list-group-item">
+												<div class="reply-write-box">
+													<div class="form-group">
+														<label for="reply_textarea">댓글 작성하기</label>
+														<textarea class="form-control" id="reply_textarea"
+															rows="3"></textarea>
+													</div>
+													<div style="width: 100%; text-align: right">
+														<button onclick="reply_post({{ post.postnum }}, '{{ uid }}')"
+															class="btn btn-outline-success" style="margin-top: 10px;">
+															등록
+														</button>
+													</div>
+												</div>
+											</li>
+											<li class="list-group-item">
+											<p class="right-align"><strong>{{ post.replies.name }}</strong></p>
+											<p class="right-align" id="reply_text{{ post.replies.replynum }}">{{ post.replies.text }}</p>
+											<div class="form-group d-none" id="reply_textarea_update{{ post.replies.replynum }}">
+												<textarea class="form-control" id="reply_update_text{{ post.replies.replynum }}" rows="3">{{ post.replies.text }}</textarea>
+											</div>
+											{% if post.replies.uid == uid %}
+											<div class="right-align" id="reply_delete_button_box{{ post.replies.replynum }}" >
+												<button type="button" class="btn btn-sm btn-outline-secondary"
+													onclick="reply_delete({{post.replies.replynum}},{{post.postnum}})">삭제</button>
+												<button type="button" class="btn btn-sm btn-outline-secondary"
+													 onclick="reply_toggle_update({{ post.replies.replynum }})">수정</button>
+											</div>
+											<div class="right-align d-none" id="reply_update_button_box{{ post.replies.replynum }}" >
+												<button type="button" class="btn btn-sm btn-outline-secondary"
+													onclick="reply_update({{ post.replies.replynum }}, {{ post.postnum }})">수정완료</button>
+												<button type="button" class="btn btn-sm btn-outline-secondary"
+													onclick="reply_cancel_update({{ post.replies.replynum }})">취소</button>
+											</div>
+											{% endif %}
+										</li>
+										</ul>
+									</div>
+									<div class="modal-footer">
+										{% if post.uid == uid %}
+										<button type="button" class="btn btn-sm btn-outline-success"
+											onclick="deleteButton({{post.postnum}})">게시물 삭제</button>
+										<button type="button" class="btn btn-sm btn-outline-success"
+											onclick="updateButton({{post.postnum}},'{{post.category}}')">게시물 수정</button>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</div>
 						{% endfor %}
 					</ul>
 				</div>
