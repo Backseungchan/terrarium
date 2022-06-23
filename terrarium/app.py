@@ -1,4 +1,3 @@
-from unicodedata import category
 import certifi
 from pymongo import MongoClient, DESCENDING
 import jwt
@@ -64,6 +63,7 @@ def sign_in():
     result = db.users.find_one({'uid': uid_receive, 'password': pw_hash})
     result2 = result["is_quit"]
 
+    #is_quit(회원가입 시 0 탈퇴 시 1)
     if result2 == str(1):
         return jsonify({'result': 'fail', 'msg': '탈퇴한 회원입니다.'})
 
@@ -89,6 +89,7 @@ def sign_up():
     birthmm_receive = request.form['birthmm_give']
     birthdd_receive = request.form['birthdd_give']
     nickname_receive = request.form['nickname_give']
+    is_quit_recevie = request.form['is_quit_give']
 
     password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     doc = {
@@ -97,8 +98,8 @@ def sign_up():
         "nickname": nickname_receive,  # 닉네임
         "birthyy": birthyy_receive,  # 출생년도
         "birthmm": birthmm_receive,  # 출생월
-        "birthdd": birthdd_receive  # 출생일
-
+        "birthdd": birthdd_receive,  # 출생일
+        "is_quit": is_quit_recevie
     }
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
