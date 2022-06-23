@@ -390,10 +390,11 @@ def reply_post():
         # replies_num = len(list(db.post.find_one({"postnum": postnum_receive}, {"_id": False})["replies"]))
         # replies_num = int(db.post.aggregate([{"$addFields": {"lastElem": {"$last": "$replies"}}}])["replynum"])
         if "replies" in a_post:
-            lastone = list(a_post["replies"]).pop()
-            replies_num = lastone["replynum"]
-        elif len(list(a_post["replies"])) == 0:
-            replies_num = 0
+            if len(list(a_post["replies"])) == 0:
+                replies_num = 0
+            else:
+                lastone = list(a_post["replies"]).pop()
+                replies_num = lastone["replynum"]
         else:
             replies_num = 0
     else:

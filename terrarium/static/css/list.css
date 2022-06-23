@@ -77,14 +77,17 @@ a {
 	width: 100%;
 }
 
-.bold-p {
+.content{
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.right-align {
 	margin-top: 10px;
 	margin-bottom: 10px;
 	
-	justify-content: center;
+	justify-content: right;
 	text-align: right;
-
-	font-weight: bold;
 }
 
 .card-img-top {
