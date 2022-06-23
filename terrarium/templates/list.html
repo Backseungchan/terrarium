@@ -80,14 +80,22 @@
 										{% for reply in post.replies %}
 										<li class="list-group-item">
 											<p class="right-align"><strong>{{ reply.name }}</strong></p>
-											<p class="right-align">{{ reply.text }}</p>
+											<p class="right-align" id="reply_text{{ reply.replynum }}">{{ reply.text }}</p>
+											<div class="form-group d-none" id="reply_textarea_update{{ reply.replynum }}">
+												<textarea class="form-control" id="reply_update_text{{ reply.replynum }}" rows="3">{{ reply.text }}</textarea>
+											</div>
 											{% if reply.uid == uid %}
-
-											<div class="right-align">
+											<div class="right-align" id="reply_delete_button_box{{ reply.replynum }}" >
 												<button type="button" class="btn btn-sm btn-outline-secondary"
 													onclick="reply_delete({{reply.replynum}},{{post.postnum}})">삭제</button>
 												<button type="button" class="btn btn-sm btn-outline-secondary"
-													onclick="reply_update({{reply.replynum}},{{post.postnum}})">수정</button>
+													 onclick="reply_toggle_update({{ reply.replynum }})">수정</button>
+											</div>
+											<div class="right-align d-none" id="reply_update_button_box{{ reply.replynum }}" >
+												<button type="button" class="btn btn-sm btn-outline-secondary"
+													onclick="reply_update({{ reply.replynum }}, {{ post.postnum }})">수정완료</button>
+												<button type="button" class="btn btn-sm btn-outline-secondary"
+													onclick="reply_cancel_update({{ reply.replynum }})">취소</button>
 											</div>
 											{% endif %}
 										</li>
