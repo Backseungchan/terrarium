@@ -11,6 +11,7 @@
 {% block script %}
 	<!-- js호출 -->
 	<script src="../static/js/list.js"></script>
+	<script src="../static/js/reply.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -33,7 +34,7 @@
 						<div class="col">
 							<div class="card shadow-sm">
 								<div class="card-img-top"
-									style="height: 255px; background-image: url(../static/pic/{{ post.pic }}),url(../static/images/noImage.gif); background-size: cover;">
+									style="background-image: url(../static/pic/{{ post.pic }}),url(../static/images/noImage.gif);">
 								</div>
 								<div class="card-body">
 									<h4>{{ '제목없음' if post.title == "" else post.title }}</h4>
@@ -45,28 +46,60 @@
 					</a>
 					<div class="modal fade" id="exampleModal{{post.postnum}}" tabindex="-1"
 						aria-labelledby="exampleModalLabel" aria-hidden="true">
-						<div class="modal-dialog modal-dialog-scrollable">
+						<div class="modal-dialog modal-lg modal-dialog-scrollable">
 							<div class="modal-content">
 								<div class="modal-header">
 									<h5 class="modal-title" id="exampleModalLabel">{{ '제목없음' if post.title == "" else
 										post.title }}</h5>
 									<button type="button" class="btn-close" data-bs-dismiss="modal"
 										aria-label="Close"></button>
-									<div>{{post.name}}</div>
-									<!-- <div>ㅅㄷ</div> -->
+
 								</div>
 								<div class="card-img-top"
-									style="height: 255px; background-image: url(../static/pic/{{ post.pic }}),url(../static/images/noImage.gif); background-size: cover;">
+									style="background-image: url(../static/pic/{{ post.pic }}),url(../static/images/noImage.gif);">
 								</div>
 								<div class="modal-body">
-									{{ '내용없음' if post.contents == "" else post.contents}}
+									<p class="content right-align">작성자 : {{post.nickname}}</p>
+									<p class="content">{{ '내용없음' if post.contents == "" else post.contents}}</p>
+									<ul class="list-group">
+										<li class="list-group-item">
+											<div class="reply-write-box">
+												<div class="form-group">
+													<label for="reply_textarea">댓글 작성하기</label>
+													<textarea class="form-control" id="reply_textarea"
+														rows="3"></textarea>
+												</div>
+												<div style="width: 100%; text-align: right">
+													<button onclick="reply_post({{ post.postnum }}, '{{ uid }}')"
+														class="btn btn-outline-success" style="margin-top: 10px;">
+														등록
+													</button>
+												</div>
+											</div>
+										</li>
+										{% for reply in post.replies %}
+										<li class="list-group-item">
+											<p class="right-align"><strong>{{ reply.name }}</strong></p>
+											<p class="right-align">{{ reply.text }}</p>
+											{% if reply.uid == uid %}
+
+											<div class="right-align">
+												<button type="button" class="btn btn-sm btn-outline-secondary"
+													onclick="reply_delete({{reply.replynum}},{{post.postnum}})">삭제</button>
+												<button type="button" class="btn btn-sm btn-outline-secondary"
+													onclick="reply_update({{reply.replynum}},{{post.postnum}})">수정</button>
+											</div>
+											{% endif %}
+										</li>
+										{% endfor %}
+									</ul>
 								</div>
 								<div class="modal-footer">
 									{% if post.uid == uid %}
-									<button type="button" class="btn btn-sm btn-outline-secondary"
-										onclick="deleteButton({{post.postnum}})">삭제</button>
-									<button type="button" class="btn btn-sm btn-outline-secondary"
-										onclick="updateButton({{post.postnum}},'{{category}}')">수정</button>
+									<button type="button" class="btn btn-sm btn-outline-success"
+										onclick="deleteButton({{post.postnum}})">게시글 삭제</button>
+									<button type="button" class="btn btn-sm btn-outline-success"
+										onclick="updateButton({{post.postnum}},'{{category}}')">게시글 수정</button>
 									{% endif %}
 								</div>
 							</div>
@@ -77,45 +110,49 @@
 
 				<!-- pagination -->
 				<div class="navigation-box">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination">
+					<nav aria-label="Page navigation example">
+						<ul class="pagination">
 							<!-- 왼쪽 화살표 -->
-                            <li class="page-item">
-								{% if page < 2 %}
-								<a class="page-link disabled" href="javascript:void(0)" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                                {% else %}
-								<a class="page-link" href="/list/{{category}}?page={{page-1}}&uid={{uid}}" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-								{% endif %}
-                            </li>
+							<li class="page-item">
+								{% if page < 2 %} <a class="page-link disabled" href="javascript:void(0)"
+									aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span>
+									</a>
+									{% else %}
+									<a class="page-link" href="/list/{{category}}?page={{page-1}}&uid={{uid}}"
+										aria-label="Previous">
+										<span aria-hidden="true">&laquo;</span>
+									</a>
+									{% endif %}
+							</li>
 
 							<!-- 각 페이지 번호 -->
 							{% for n in range(1, pagecount+1) %}
-								{% if page == n %}
-                            		<li class="page-item"><a class="page-link active" href="/list/{{category}}?page={{n}}&uid={{uid}}">{{n}}</a></li>
-								{% else %}
-							 		<li class="page-item"><a class="page-link" href="/list/{{category}}?page={{n}}&uid={{uid}}">{{n}}</a></li>
-								{% endif %}
+							{% if page == n %}
+							<li class="page-item"><a class="page-link active"
+									href="/list/{{category}}?page={{n}}&uid={{uid}}">{{n}}</a></li>
+							{% else %}
+							<li class="page-item"><a class="page-link"
+									href="/list/{{category}}?page={{n}}&uid={{uid}}">{{n}}</a></li>
+							{% endif %}
 							{% endfor %}
 
 							<!-- 오른쪽 화살표 -->
-                            <li class="page-item">
-                                {% if page >= pagecount %}
+							<li class="page-item">
+								{% if page >= pagecount %}
 								<a class="page-link disabled" href="javascript:void(0)" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                                {% else %}
-								<a class="page-link" href="/list/{{category}}?page={{page+1}}&uid={{uid}}" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
+									<span aria-hidden="true">&raquo;</span>
+								</a>
+								{% else %}
+								<a class="page-link" href="/list/{{category}}?page={{page+1}}&uid={{uid}}"
+									aria-label="Next">
+									<span aria-hidden="true">&raquo;</span>
+								</a>
 								{% endif %}
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+							</li>
+						</ul>
+					</nav>
+				</div>
 			</div>
 		</div>
 	</div>

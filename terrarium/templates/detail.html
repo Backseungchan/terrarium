@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🌿Terrarium</title>
+    <!-- og 태그-->
+    <meta property="og:title" content="🌿Terrarium - 테라리움">
+    <meta property="og:image" content="static/images/logo/og_image.jpg">
+    <meta property="og:description" content="잘 키운 반려식물 열 반려동물 안부럽다? 내가 키운 식물로 재테크 까지 모든 건 테라리움에서~">
+    <!-- jQuery 로드 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- 부트스트랩 CSS 로드 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+          crossorigin="anonymous">
+    <!-- 부트스트랩 Javascript(애니메이션 등에 사용됨) 로드 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+            crossorigin="anonymous"></script>
+    <!-- 테마 CSS 로드(지금은 폰트만 있는 상태, theme.css 수정 시 주석도 수정해주세요) -->
+    <link rel="stylesheet" href="../static/theme.css">
+    <style>
+        .wrap {
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        .banner {
+            width: 100%;
+            height: 200px;
+
+            color: white;
+
+            text-align: center;
+
+            background-color: white;
+
+            background-image: url('{{ url_for("static", filename="images/logo/og_image.jpg") }}');
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+
+            cursor: pointer;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+
+            border: solid 1px gray;
+            border-radius: 10px;
+        }
+
+        .btn-container {
+            width: 300px;
+            text-align: center;
+            margin: auto;
+        }
+
+        .btn-outline-delete {
+            color: #e8344e;
+            background-color: transparent;
+            background-image: none;
+            border-color: #e8344e;
+            width: 100px;
+            margin: auto;
+        }
+
+        .btn-outline-modify {
+            color: blue;
+            background-color: transparent;
+            background-image: none;
+            border-color: blue;
+            width: 100px;
+            margin: auto;
+
+        }
+
+        .card {
+            width: 80%;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .btn-move {
+            width: 300px;
+            text-align: center;
+            margin: auto;
+        }
+        .btn-move {
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+
+    </style>
+
+    <script>
+        $.ajax({
+            type: "POST",
+            url: "/sign_in",
+            data: {
+                username_give: username,
+                password_give: password
+            },
+
+        });
+
+function contents_del(){
+
+
+
+
+
+
+}
+
+
+    </script>
+</head>
+<body>
+<div class="wrap">
+    <div class="banner" onclick="window.location.href = '/'">
+        <h1>{{ post.category }}</h1>
+    </div>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end">
+            <div>
+                <h1 id="title" style="display: inline;">{{ post.title }}</h1>
+                <h4 id="nickname">{{ post.name }}</h4>
+            </div>
+        </div>
+        <hr>
+
+        <div class="card" style="width: 90%;">
+            <img id="pic" src="{{ post.pic }}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <p id="contents" class="card-text">{{ post.content }}</p>
+            </div>
+
+            <ul class="list-group">
+                {% for post in data.replies %}
+                <li class="list-group-item">
+                    <p>{{ post.replies.text }}</p>
+                    <a href="/{{ post.postnum }}"><strong>게시글 : </strong>{{ post.title }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="btn-container">
+            <button onclick="contents_mod()" id="btn-modify" class="btn btn-outline-modify btn-lg">수정</button>
+            <button onclick="contents_del()" id="btn-delete" class="btn btn-outline-delete btn-lg">삭제</button>
+        </div>
+    </div>
+    <div class="btn-move">
+        <button onclick="" id="btn-back" class="btn btn-light ">이전</button>
+        <button onclick="window.location.href = '/'" id="btn-home" class="btn btn-secondary">home</button>
+        <button onclick="" id="btn-next" class="btn btn-light">다음</button>
+    </div>
+</div>
+</body>
+</html>

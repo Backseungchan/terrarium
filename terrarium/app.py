@@ -1,12 +1,8 @@
-
-import datetime
-from unicodedata import category
 import certifi
 from pymongo import MongoClient, DESCENDING
 import jwt
 import datetime
 import hashlib
-import json
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from datetime import datetime, timedelta
 
@@ -23,9 +19,17 @@ app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 ca = certifi.where()  # mongodb 보안 문제로 추가
 
 # 철호님 DB
-client = MongoClient('mongodb+srv://test:sparta@cluster0.ihwyd.mongodb.net/Cluster0?retryWrites=true&w=majority',
-                     tlsCAFile=ca)
+client = MongoClient('mongodb+srv://test:sparta@cluster0.ihwyd.mongodb.net/Cluster0?retryWrites=true&w=majority', tlsCAFile=ca)
 db = client.dbsparta
+
+# 지민 db
+# client = MongoClient('mongodb+srv://test:sparta@cluster0.stpfk.mongodb.net/Cluster0?retryWrites=true&w=majority',tlsCAFile=ca)
+# db = client.dbsparta
+
+
+
+# JWT 토큰에는, payload와 시크릿키가 필요
+# 시크릿키가 있어야 토큰을 디코딩(=풀기) 해서 payload 값을 볼 수 있음
 
 SECRET_KEY = 'SPARTA'
 
@@ -41,7 +45,6 @@ def home():
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 
-# 문제생기면 여기부터 확인
 @app.route('/login')
 def login():
     msg = request.args.get("msg")
@@ -54,10 +57,18 @@ def sign_in():
     uid_receive = request.form['uid_give']
     password_receive = request.form['password_give']
 
+    # PW 암호화
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    # ID, 암호화 된 PW를 가지고 해당 유저 찾기
     result = db.users.find_one({'uid': uid_receive, 'password': pw_hash})
+    result2 = result["is_quit"]
 
-    if result is not None:
+    #is_quit(회원가입 시 0 탈퇴 시 1)
+    if result2 == 1:
+        return jsonify({'result': 'fail', 'msg': '탈퇴한 회원입니다.'})
+
+    # 찾으면 JWT 토큰 만들어 발급
+    elif result is not None:
         payload = {
             'id': uid_receive,
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 1일 유지
@@ -66,9 +77,6 @@ def sign_in():
 
         return jsonify({'result': 'success', 'token': token, 'uid':uid_receive})
 
-    # elif "is_quit" in data == 1 :
-
-    # 찾지 못하면
     else:
         return jsonify({'result': 'fail', 'msg': '존재하지 않는 아이디거나 비밀번호가 일치하지 않습니다.'})
 
@@ -81,6 +89,8 @@ def sign_up():
     birthmm_receive = request.form['birthmm_give']
     birthdd_receive = request.form['birthdd_give']
     nickname_receive = request.form['nickname_give']
+    is_quit_recevie = request.form['is_quit_give']
+
     password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     doc = {
         "uid": uid_receive,  # 아이디
@@ -89,6 +99,7 @@ def sign_up():
         "birthyy": birthyy_receive,  # 출생년도
         "birthmm": birthmm_receive,  # 출생월
         "birthdd": birthdd_receive,  # 출생일
+        "is_quit": int(is_quit_recevie)
     }
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
@@ -127,6 +138,7 @@ def save_post():
     title = request.form['title']
     contents = request.form['contents']
     category = request.form['category']
+    user = db.users.find_one({"uid":uid}, {"_id":False})
     try:
         pic = request.files["pic"]
         filename, extension = pic.filename.split('.')  # 파일의 이름, 확장자
@@ -139,6 +151,7 @@ def save_post():
     postnum = post_list[-1]["postnum"] + 1
     doc = {
         'uid': uid,
+        'nickname': user["nickname"],
         'postnum': postnum,
         'category': category,
         'title': title,
@@ -377,10 +390,11 @@ def reply_post():
         # replies_num = len(list(db.post.find_one({"postnum": postnum_receive}, {"_id": False})["replies"]))
         # replies_num = int(db.post.aggregate([{"$addFields": {"lastElem": {"$last": "$replies"}}}])["replynum"])
         if "replies" in a_post:
-            lastone = list(a_post["replies"]).pop()
-            replies_num = lastone["replynum"]
-        elif len(list(a_post["replies"])) == 0:
-            replies_num = 0
+            if len(list(a_post["replies"])) == 0:
+                replies_num = 0
+            else:
+                lastone = list(a_post["replies"]).pop()
+                replies_num = lastone["replynum"]
         else:
             replies_num = 0
     else:
