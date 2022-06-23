@@ -33,12 +33,13 @@ function setUp(postnum) {
 
       document.querySelector("#title").setAttribute("value", title);
       $(".custom-file-label")[0].innerHTML = pic;
-      document
-        .querySelector("#thumbnail")
-        .setAttribute("src", "../static/pic/" + pic);
-      document
-        .querySelector("#thumbnail")
-        .setAttribute("onerror", 'this.src = "../static/images/noImage.gif"');
+      style =
+        "background-image: url(" +
+        "../static/pic/" +
+        pic +
+        "),url(../static/images/noImage.gif);";
+      document.querySelector("#thumbnailBox").setAttribute("style", style);
+
       $("#contents").val(contents);
     },
   });
@@ -49,11 +50,11 @@ function setThumbnail(event) {
   bsCustomFileInput.init();
   var reader = new FileReader();
 
-  reader.onload = function (event) {
-    document
-      .querySelector("#thumbnail")
-      .setAttribute("src", event.target.result);
-  };
+  style =
+    "background-image: url(" +
+    event.target.result +
+    "),url(../static/images/noImage.gif);";
+  document.querySelector("#thumbnailBox").setAttribute("style", style);
   reader.readAsDataURL(event.target.files[0]);
 }
 

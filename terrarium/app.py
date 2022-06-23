@@ -127,6 +127,7 @@ def save_post():
     title = request.form['title']
     contents = request.form['contents']
     category = request.form['category']
+    user = db.users.find_one({"uid":uid}, {"_id":False})
     try:
         pic = request.files["pic"]
         filename, extension = pic.filename.split('.')  # 파일의 이름, 확장자
@@ -139,6 +140,7 @@ def save_post():
     postnum = post_list[-1]["postnum"] + 1
     doc = {
         'uid': uid,
+        'nickname': user["nickname"],
         'postnum': postnum,
         'category': category,
         'title': title,

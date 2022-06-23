@@ -18,9 +18,11 @@ function setThumbnail(event) {
   var reader = new FileReader();
 
   reader.onload = function (event) {
-    document
-      .querySelector("#thumbnail")
-      .setAttribute("src", event.target.result);
+    style =
+      "background-image: url(" +
+      event.target.result +
+      "),url(../static/images/noImage.gif);";
+    document.querySelector("#thumbnailBox").setAttribute("style", style);
   };
 
   reader.readAsDataURL(event.target.files[0]);

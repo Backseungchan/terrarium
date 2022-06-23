@@ -44,7 +44,7 @@
 						<div class="col">
 							<div class="card shadow-sm">
 								<div class="card-img-top"
-									style="height: 255px; background-image: url(../static/pic/{{ post.pic }}),url(../static/images/noImage.gif); background-size: cover;">
+									style="background-image: url(../static/pic/{{ post.pic }}),url(../static/images/noImage.gif);">
 								</div>
 								<div class="card-body">
 									<h4>{{ '제목없음' if post.title == "" else post.title }}</h4>
@@ -63,13 +63,13 @@
 										post.title }}</h5>
 									<button type="button" class="btn-close" data-bs-dismiss="modal"
 										aria-label="Close"></button>
-									<div>{{post.name}}</div>
-									<!-- <div>ㅅㄷ</div> -->
+
 								</div>
 								<div class="card-img-top"
-									style="height: 255px; background-image: url(../static/pic/{{ post.pic }}),url(../static/images/noImage.gif); background-size: cover;">
+									style="background-image: url(../static/pic/{{ post.pic }}),url(../static/images/noImage.gif);">
 								</div>
 								<div class="modal-body">
+									<p class="bold-p">작성자 : {{post.nickname}}</p>
 									{{ '내용없음' if post.contents == "" else post.contents}}
 								</div>
 								<div class="modal-footer">
