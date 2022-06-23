@@ -75,22 +75,6 @@ body {
     margin: auto;
 }
 
-/*.nvi_bar.button {
-    color: green;
-}*/
-
-/*.button.nvi_bar {*/
-/*    background-color: #e8344e;*/
-/*    border-color: transparent;*/
-/*    color: #fff !important;*/
-/*}*/
-
-/*.button.nvi_bar.is-outlined {*/
-/*    background-color: transparent;*/
-/*    border-color: #e8344e;*/
-/*    color: #e8344e !important;*/
-/*}*/
-
 .modal-content {
     width: 600px;
     max-width: 80%;
