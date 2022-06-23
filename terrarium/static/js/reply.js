@@ -41,21 +41,21 @@ function reply_delete(replynum, postnum) {
   }
 }
 
-function reply_toggle_update(replynum) {
-  $("#reply_textarea_update" + replynum).toggleClass("d-none");
-  $("#reply_text" + replynum).toggleClass("d-none");
-  $("#reply_delete_button_box" + replynum).toggleClass("d-none");
-  $("#reply_update_button_box" + replynum).toggleClass("d-none");
+function reply_toggle_update(replynum, postnum) {
+  $("#reply_textarea_update" + postnum + "-" + replynum).toggleClass("d-none");
+  $("#reply_text" + postnum + "-" + replynum).toggleClass("d-none");
+  $("#reply_delete_button_box" + postnum + "-" + replynum).toggleClass("d-none");
+  $("#reply_update_button_box" + postnum + "-" + replynum).toggleClass("d-none");
 }
 
-function reply_cancel_update(replynum) {
+function reply_cancel_update(replynum, postnum) {
   if (confirm("수정을 취소하시겠습니까?")) {
-    reply_toggle_update(replynum);
+    reply_toggle_update(replynum, postnum);
   }
 }
 
 function reply_update(replynum, postnum) {
-  let text = $("#reply_update_text" + replynum).val();
+  let text = $("#reply_update_text" + postnum + "-" + replynum).val();
   if (confirm("댓글을 수정하시겠습니까?")) {
     $.ajax({
       type: "POST",
