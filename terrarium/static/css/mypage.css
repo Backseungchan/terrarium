@@ -83,6 +83,13 @@
     display: block;
 }
 
+.card-text {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 100%;
+}
+
 .help{
     font-size: small;
     color: grey;

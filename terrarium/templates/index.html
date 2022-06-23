@@ -33,30 +33,6 @@
 
 
 	<script>
-		$(document).ready(function () {
-			const URLSearch = new URLSearchParams(location.search);
-			var uid = URLSearch.get("uid");
-			var info = "./list/info?uid=" + uid;
-			var boast = "./list/boast?uid=" + uid;
-			var tech = "./list/tech?uid=" + uid;
-			var mypage = "./mypage?uid=" + uid;
-
-			document
-				.querySelector("#info")
-				.setAttribute("href", info);
-			document
-				.querySelector("#tech")
-				.setAttribute("href", tech);
-			document
-				.querySelector("#boast")
-				.setAttribute("href", boast);
-			document
-				.querySelector("#mypage")
-				.setAttribute("href", mypage);
-
-		});
-
-
 		function sign_out() {
 			$.removeCookie('mytoken', { path: '/' });
 			alert('로그아웃!')
@@ -74,13 +50,13 @@
 
 		<nav>
 			<ul>
-				<li><a id="mypage" href="#" class="aa">My page</a></li>
+				<li><a id="mypage" href="/mypage" class="aa">My page</a></li>
 				<li><a href="#" class="aa" onclick="sign_out()">Logout</a></li>
 			</ul>
 		</nav>
 	</div>
 	<div class="home-board">
-		<a id="boast" href="">
+		<a id="boast" href="./list/boast">
 			<div class="card">
 				<div class="card-image">
 					<figure class="image is-4by3">
@@ -95,7 +71,7 @@
 				</div>
 			</div>
 			<a />
-			<a id="info" href="">
+			<a id="info" href="./list/info">
 				<div class="card">
 					<div class="card-image">
 						<figure class="image is-4by3">
@@ -112,7 +88,7 @@
 					</div>
 				</div>
 			</a>
-			<a id="tech" href="">
+			<a id="tech" href="./list/tech">
 				<div class="card">
 					<div class="card-image">
 						<figure class="image is-4by3">

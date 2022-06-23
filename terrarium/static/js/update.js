@@ -4,6 +4,20 @@ $(document).ready(function () {
   setUp(postnum);
 });
 
+function getCookie(cName) {
+  cName = cName + "=";
+  var cookieData = document.cookie;
+  var start = cookieData.indexOf(cName);
+  var cValue = "";
+  if (start != -1) {
+    start += cName.length;
+    var end = cookieData.indexOf(";", start);
+    if (end == -1) end = cookieData.length;
+    cValue = cookieData.substring(start, end);
+  }
+  return unescape(cValue);
+}
+
 //기존의 내용 채워두기
 function setUp(postnum) {
   $.ajax({
@@ -53,7 +67,6 @@ function fixing() {
   const URLSearch = new URLSearchParams(location.search);
   const category = URLSearch.get("category");
   const postnum = URLSearch.get("postnum");
-  const uid = URLSearch.get("uid");
 
   let title = $("#title").val();
   let contents = $("#contents").val();
@@ -78,7 +91,7 @@ function fixing() {
     processData: false,
     success: async function (response) {
       alert(response["msg"]);
-      location.href = "../list/" + category + "?uid=" + uid;
+      location.href = "../list/" + category;
     },
   });
 }
