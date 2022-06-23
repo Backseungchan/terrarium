@@ -2,166 +2,170 @@
 
 {% block style %}
 <!-- 부트스트랩 CSS 로드 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <!-- 부트스트랩 Javascript(애니메이션 등에 사용됨) 로드 -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+	integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<!-- 부트스트랩 Javascript(애니메이션 등에 사용됨) 로드 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+	crossorigin="anonymous"></script>
 <link rel="stylesheet" href="../static/css/list.css">
 {% endblock %}
 
 {% block script %}
-	<!-- js호출 -->
-	<script src="../static/js/list.js"></script>
-	<script src="../static/js/reply.js"></script>
+<!-- js호출 -->
+<script src="../static/js/list.js"></script>
+<script src="../static/js/reply.js"></script>
 {% endblock %}
 
 {% block content %}
-	<div class="container d-flex flex-nowrap">
-		<div class="right-box">
-			<div class="content-box">
-				<div class="header-box">
-					<h3>{{'식물정보' if category == 'info' else '식테크' if category == 'tech' else '식물자랑'}} 게시글</h3>
-					<nav class="nav-box">
-						<button type="button" class="btn btn-success" onclick="goBack()">뒤로가기</button>
-						<button type="button" class="btn btn-success"
-							onclick="uploadButton('{{category}}','{{uid}}')">작성하기</button>
-						<button type="button" class="btn btn-success" onclick="myPage()">마이페이지</button>
-					</nav>
-				</div>
-				<div class="divider"></div>
-				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-					{% for post in posts %}
-					<a href="" data-bs-toggle="modal" data-bs-target="#exampleModal{{post.postnum}}">
-						<div class="col">
-							<div class="card shadow-sm">
-								<div class="card-img-top"
-									style="background-image: url(../static/pic/{{ post.pic }}),url(../static/images/noImage.gif);">
-								</div>
-								<div class="card-body">
-									<h4>{{ '제목없음' if post.title == "" else post.title }}</h4>
-									<p class="card-text">{{ '내용없음' if post.contents == "" else post.contents
-										}}</p>
-								</div>
+<div class="container d-flex flex-nowrap">
+	<div class="right-box">
+		<div class="content-box">
+			<div class="header-box">
+				<h3>{{'식물정보' if category == 'info' else '식테크' if category == 'tech' else '식물자랑'}} 게시글</h3>
+				<nav class="nav-box">
+					<button type="button" class="btn btn-success" onclick="goBack()">뒤로가기</button>
+					<button type="button" class="btn btn-success"
+						onclick="uploadButton('{{category}}','{{uid}}')">작성하기</button>
+					<button type="button" class="btn btn-success" onclick="myPage()">마이페이지</button>
+				</nav>
+			</div>
+			<div class="divider"></div>
+			<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+				{% for post in posts %}
+				<a href="" data-bs-toggle="modal" data-bs-target="#exampleModal{{post.postnum}}">
+					<div class="col">
+						<div class="card shadow-sm">
+							<div class="card-img-top"
+								style="background-image: url(../static/pic/{{ post.pic }}),url(../static/images/noImage.gif);">
 							</div>
-						</div>
-					</a>
-					<div class="modal fade" id="exampleModal{{post.postnum}}" tabindex="-1"
-						aria-labelledby="exampleModalLabel" aria-hidden="true">
-						<div class="modal-dialog modal-lg modal-dialog-scrollable">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">{{ '제목없음' if post.title == "" else
-										post.title }}</h5>
-									<button type="button" class="btn-close" data-bs-dismiss="modal"
-										aria-label="Close"></button>
-
-								</div>
-								<div class="card-img-top"
-									style="background-image: url(../static/pic/{{ post.pic }}),url(../static/images/noImage.gif);">
-								</div>
-								<div class="modal-body">
-									<p class="content right-align">작성자 : {{post.nickname}}</p>
-									<p class="content">{{ '내용없음' if post.contents == "" else post.contents}}</p>
-									<ul class="list-group">
-										<li class="list-group-item">
-											<div class="reply-write-box">
-												<div class="form-group">
-													<label for="reply_textarea">댓글 작성하기</label>
-													<textarea class="form-control" id="reply_textarea"
-														rows="3"></textarea>
-												</div>
-												<div style="width: 100%; text-align: right">
-													<button onclick="reply_post({{ post.postnum }}, '{{ uid }}')"
-														class="btn btn-outline-success" style="margin-top: 10px;">
-														등록
-													</button>
-												</div>
-											</div>
-										</li>
-										{% for reply in post.replies %}
-										<li class="list-group-item">
-											<p class="right-align"><strong>{{ reply.name }}</strong></p>
-											<p class="right-align" id="reply_text{{ reply.replynum }}">{{ reply.text }}</p>
-											<div class="form-group d-none" id="reply_textarea_update{{ reply.replynum }}">
-												<textarea class="form-control" id="reply_update_text{{ reply.replynum }}" rows="3">{{ reply.text }}</textarea>
-											</div>
-											{% if reply.uid == uid %}
-											<div class="right-align" id="reply_delete_button_box{{ reply.replynum }}" >
-												<button type="button" class="btn btn-sm btn-outline-secondary"
-													onclick="reply_delete({{reply.replynum}},{{post.postnum}})">삭제</button>
-												<button type="button" class="btn btn-sm btn-outline-secondary"
-													 onclick="reply_toggle_update({{ reply.replynum }})">수정</button>
-											</div>
-											<div class="right-align d-none" id="reply_update_button_box{{ reply.replynum }}" >
-												<button type="button" class="btn btn-sm btn-outline-secondary"
-													onclick="reply_update({{ reply.replynum }}, {{ post.postnum }})">수정완료</button>
-												<button type="button" class="btn btn-sm btn-outline-secondary"
-													onclick="reply_cancel_update({{ reply.replynum }})">취소</button>
-											</div>
-											{% endif %}
-										</li>
-										{% endfor %}
-									</ul>
-								</div>
-								<div class="modal-footer">
-									{% if post.uid == uid %}
-									<button type="button" class="btn btn-sm btn-outline-success"
-										onclick="deleteButton({{post.postnum}})">게시글 삭제</button>
-									<button type="button" class="btn btn-sm btn-outline-success"
-										onclick="updateButton({{post.postnum}},'{{category}}')">게시글 수정</button>
-									{% endif %}
-								</div>
+							<div class="card-body">
+								<h4 class="card-text">{{ '제목없음' if post.title == "" else post.title }}</h4>
+								<p class="card-text">{{ '내용없음' if post.contents == "" else post.contents
+									}}</p>
 							</div>
 						</div>
 					</div>
-					{% endfor %}
+				</a>
+				<div class="modal fade" id="exampleModal{{post.postnum}}" tabindex="-1"
+					aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg modal-dialog-scrollable">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">{{ '제목없음' if post.title == "" else
+									post.title }}</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Close"></button>
+
+							</div>
+							<div class="card-img-top"
+								style="background-image: url(../static/pic/{{ post.pic }}),url(../static/images/noImage.gif);">
+							</div>
+							<div class="modal-body">
+								<p class="content right-align">작성자 : {{post.nickname}}</p>
+								<p class="content">{{ '내용없음' if post.contents == "" else post.contents}}</p>
+								<ul class="list-group">
+									<li class="list-group-item">
+										<div class="reply-write-box">
+											<div class="form-group">
+												<label for="reply_textarea">댓글 작성하기</label>
+												<textarea class="form-control" id="reply_textarea" rows="3"></textarea>
+											</div>
+											<div style="width: 100%; text-align: right">
+												<button onclick="reply_post({{ post.postnum }}, '{{ uid }}')"
+													class="btn btn-outline-success" style="margin-top: 10px;">
+													등록
+												</button>
+											</div>
+										</div>
+									</li>
+									{% for reply in post.replies %}
+									<li class="list-group-item">
+										<p class="right-align"><strong>{{ reply.name }}</strong></p>
+										<p class="right-align" id="reply_text{{ reply.replynum }}">{{ reply.text }}</p>
+										<div class="form-group d-none" id="reply_textarea_update{{ reply.replynum }}">
+											<textarea class="form-control" id="reply_update_text{{ reply.replynum }}"
+												rows="3">{{ reply.text }}</textarea>
+										</div>
+										{% if reply.uid == uid %}
+										<div class="right-align" id="reply_delete_button_box{{ reply.replynum }}">
+											<button type="button" class="btn btn-sm btn-outline-secondary"
+												onclick="reply_delete({{reply.replynum}},{{post.postnum}})">삭제</button>
+											<button type="button" class="btn btn-sm btn-outline-secondary"
+												onclick="reply_toggle_update({{ reply.replynum }})">수정</button>
+										</div>
+										<div class="right-align d-none"
+											id="reply_update_button_box{{ reply.replynum }}">
+											<button type="button" class="btn btn-sm btn-outline-secondary"
+												onclick="reply_update({{ reply.replynum }}, {{ post.postnum }})">수정완료</button>
+											<button type="button" class="btn btn-sm btn-outline-secondary"
+												onclick="reply_cancel_update({{ reply.replynum }})">취소</button>
+										</div>
+										{% endif %}
+									</li>
+									{% endfor %}
+								</ul>
+							</div>
+							<div class="modal-footer">
+								{% if post.uid == uid %}
+								<button type="button" class="btn btn-sm btn-outline-success"
+									onclick="deleteButton({{post.postnum}})">게시글 삭제</button>
+								<button type="button" class="btn btn-sm btn-outline-success"
+									onclick="updateButton({{post.postnum}},'{{category}}')">게시글 수정</button>
+								{% endif %}
+							</div>
+						</div>
+					</div>
 				</div>
+				{% endfor %}
+			</div>
 
-				<!-- pagination -->
-				<div class="navigation-box">
-					<nav aria-label="Page navigation example">
-						<ul class="pagination">
-							<!-- 왼쪽 화살표 -->
-							<li class="page-item">
-								{% if page < 2 %} <a class="page-link disabled" href="javascript:void(0)"
-									aria-label="Previous">
-									<span aria-hidden="true">&laquo;</span>
-									</a>
-									{% else %}
-									<a class="page-link" href="/list/{{category}}?page={{page-1}}&uid={{uid}}"
-										aria-label="Previous">
-										<span aria-hidden="true">&laquo;</span>
-									</a>
-									{% endif %}
-							</li>
-
-							<!-- 각 페이지 번호 -->
-							{% for n in range(1, pagecount+1) %}
-							{% if page == n %}
-							<li class="page-item"><a class="page-link active"
-									href="/list/{{category}}?page={{n}}&uid={{uid}}">{{n}}</a></li>
-							{% else %}
-							<li class="page-item"><a class="page-link"
-									href="/list/{{category}}?page={{n}}&uid={{uid}}">{{n}}</a></li>
-							{% endif %}
-							{% endfor %}
-
-							<!-- 오른쪽 화살표 -->
-							<li class="page-item">
-								{% if page >= pagecount %}
-								<a class="page-link disabled" href="javascript:void(0)" aria-label="Next">
-									<span aria-hidden="true">&raquo;</span>
+			<!-- pagination -->
+			<div class="navigation-box">
+				<nav aria-label="Page navigation example">
+					<ul class="pagination">
+						<!-- 왼쪽 화살표 -->
+						<li class="page-item">
+							{% if page < 2 %} <a class="page-link disabled" href="javascript:void(0)"
+								aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
 								</a>
 								{% else %}
-								<a class="page-link" href="/list/{{category}}?page={{page+1}}&uid={{uid}}"
-									aria-label="Next">
-									<span aria-hidden="true">&raquo;</span>
+								<a class="page-link" href="/list/{{category}}?page={{page-1}}&uid={{uid}}"
+									aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span>
 								</a>
 								{% endif %}
-							</li>
-						</ul>
-					</nav>
-				</div>
+						</li>
+
+						<!-- 각 페이지 번호 -->
+						{% for n in range(1, pagecount+1) %}
+						{% if page == n %}
+						<li class="page-item"><a class="page-link active"
+								href="/list/{{category}}?page={{n}}&uid={{uid}}">{{n}}</a></li>
+						{% else %}
+						<li class="page-item"><a class="page-link"
+								href="/list/{{category}}?page={{n}}&uid={{uid}}">{{n}}</a></li>
+						{% endif %}
+						{% endfor %}
+
+						<!-- 오른쪽 화살표 -->
+						<li class="page-item">
+							{% if page >= pagecount %}
+							<a class="page-link disabled" href="javascript:void(0)" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+							</a>
+							{% else %}
+							<a class="page-link" href="/list/{{category}}?page={{page+1}}&uid={{uid}}"
+								aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+							</a>
+							{% endif %}
+						</li>
+					</ul>
+				</nav>
 			</div>
 		</div>
 	</div>
+</div>
 {% endblock %}

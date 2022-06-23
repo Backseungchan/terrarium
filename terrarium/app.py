@@ -138,7 +138,10 @@ def save_post():
         pic = None
 
     post_list = list(db.post.find({}, {'_id': False}))
-    postnum = post_list[-1]["postnum"] + 1
+    try:
+        postnum = post_list[-1]["postnum"] +  1
+    except:
+        postnum = 0
     doc = {
         'uid': uid,
         'nickname': user["nickname"],
@@ -150,8 +153,11 @@ def save_post():
 
     if pic != None:
         doc['pic'] = f'{filename}.{extension}'
+        doc['pic'] = doc['pic'].replace(' ', '\ ')
     db.post.insert_one(doc)
 
+    print("파일명", doc['pic'])
+    
     return jsonify({'msg': "저장 성공"})
 
 
@@ -220,7 +226,7 @@ def show_list(category):
 @app.route('/mypage')
 def mypage_pw():
     uid = request.cookies.get('uid')
-    print(uid)
+    print("mypage", uid)
     return render_template("mypage.html", category="mypage_pwconfirm", uid=uid)
 
 
