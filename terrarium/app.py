@@ -201,7 +201,7 @@ def show_list(category):
     pagecount = int(all_post / limit) + (0 if ((all_post % limit) == 0) else 1)
 
     # 출력할 포스트
-    category_posts = db.post.find(find).skip(skip).limit(limit)
+    category_posts = db.post.find(find).sort([( '$natural', -1 )]).skip(skip).limit(limit)
 
     return render_template("list.html", category=category, posts=category_posts, uid=uid_dict["uid"], pagecount=pagecount, page=page)
 
@@ -246,7 +246,7 @@ def mypage(category):
     print(data)
     # 홈일 경우 최근 작성한 게시글 3개와 최근 작성한 댓글 3개
     if category == "home":
-        recent_posts = list(db.post.find({"uid": uid}, {"_id":False}).limit(3))
+        recent_posts = list(db.post.find({"uid": uid}, {"_id":False}).sort([( '$natural', -1 )]).limit(3))
         data["recent_posts"] = recent_posts
         # 각 포스트의 replies에서 uid가 일치하는 댓글을 리스트로 가져온다.
         recent_replies = list(db.post.aggregate([
@@ -274,7 +274,7 @@ def mypage(category):
         pagecount = int(all_post / limit) + (0 if ((all_post % limit) == 0) else 1)
 
         # 출력할 포스트
-        posts = list(db.post.find(find).skip(skip).limit(limit))
+        posts = list(db.post.find(find).sort([( '$natural', -1 )]).skip(skip).limit(limit))
         # posts = list(db.post.find({"uid": uid}, {"_id": False}))
         data["posts"] = posts
 
