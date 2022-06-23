@@ -64,7 +64,7 @@ def sign_in():
     result2 = result["is_quit"]
 
     #is_quit(회원가입 시 0 탈퇴 시 1)
-    if result2 == str(1):
+    if result2 == 1:
         return jsonify({'result': 'fail', 'msg': '탈퇴한 회원입니다.'})
 
     # 찾으면 JWT 토큰 만들어 발급
@@ -99,7 +99,7 @@ def sign_up():
         "birthyy": birthyy_receive,  # 출생년도
         "birthmm": birthmm_receive,  # 출생월
         "birthdd": birthdd_receive,  # 출생일
-        "is_quit": is_quit_recevie
+        "is_quit": int(is_quit_recevie)
     }
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
