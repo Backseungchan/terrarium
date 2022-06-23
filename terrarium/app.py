@@ -1,12 +1,9 @@
-
-import datetime
 from unicodedata import category
 import certifi
 from pymongo import MongoClient
 import jwt
 import datetime
 import hashlib
-import json
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from datetime import datetime, timedelta
 
