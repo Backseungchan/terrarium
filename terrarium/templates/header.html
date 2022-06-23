@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+	<!-- Webpage Title -->
+	<title>Home | TERRARIUM</title>
+
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon/favicon.ico') }}" type="image/x-icon">
+	<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+	<meta property="og:title" content="🌿Terrarium - 테라리움">
+	<meta property="og:image" content="static/images/logo/og_image.jpg">
+	<meta property="og:description" content="잘 키운 반려식물 열 반려동물 안부럽다? 내가 키운 식물로 재테크 까지 모든 건 테라리움에서~">
+
+	<!-- JS -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <script>
+	function sign_out() {
+	$.removeCookie('mytoken', { path: '/' });
+	alert('로그아웃!')
+	window.location.href = "/login"
+	}
+</script>
+
+    {% block script %}{% endblock %}
+	{% block style %}{% endblock %}
+
+    <style>
+        .header_nav{
+            /*background-color: #48C774;*/
+            /*width: 100%;*/
+            display: flex;
+            /*position: fixed;*/
+            align-items: center;
+            justify-content: space-between;
+            padding-left: 100px;
+            padding-right: 100px;
+        }
+        .header_nav_box{
+            display: flex;
+            /*background-color: #FF3860;*/
+            justify-content: center;
+        }
+        .nav_menu{
+            font-weight: bold;
+            display: flex;
+            padding: 7px;
+			text-decoration: none;
+			color: black;
+        }
+        .nav_menu:hover{
+            color: green;
+        }
+        .nav_logo{
+            width: 200px;
+            height: 50px;
+            background-image: url("../static/images/logo/mainlogo.png");
+            /*background-color: blue;*/
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+	<div class="header_nav">
+        <div class="nav_logo_box">
+            <a href="/">
+                <div class="nav_logo"></div>
+            </a>
+        </div>
+		<nav class="header_nav_box">
+            <a id="mypage" href="/mypage" class="nav_menu">My page</a>
+            <a href="#" class="nav_menu" onclick="sign_out()">Logout</a>
+		</nav>
+	</div>
+	{% block big_logo %}
+    {% endblock %}
+    {% block content %}
+    {% endblock %}
+
+</html>
