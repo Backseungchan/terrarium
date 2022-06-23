@@ -104,19 +104,20 @@ def check_dup():
 # 게시판 C,U
 @app.route('/uploadpage')
 def load_uploadPage():
-    category_dict = request.args.to_dict()
-    return render_template("uploadpage.html",category = category_dict["category"])
+    args_dict = request.args.to_dict()
+    return render_template("uploadpage.html",category = args_dict["category"])
 
 @app.route('/updatepage')
 def load_updatePage():
-    return render_template("updatepage.html", uid='bsc')
+    uid = request.cookies.get('uid')
+    return render_template("updatepage.html", uid=uid)
 
 
 @app.route("/detail", methods=["GET"])
 def get_post():
-    postnum_dict = request.args.to_dict()  # postnum을 dict형태로 가져옴
+    args_dict = request.args.to_dict()  # postnum을 dict형태로 가져옴
     # postnum과 일치하는 post를 db에서 가져옴
-    post = list(db.post.find({'postnum': int(postnum_dict["postnum"])}, {'_id': False, }))
+    post = list(db.post.find({'postnum': int(args_dict["postnum"])}, {'_id': False, }))
     return jsonify({'post': post})
 
 
@@ -135,7 +136,7 @@ def save_post():
         pic = None
 
     post_list = list(db.post.find({}, {'_id': False}))
-    postnum = len(post_list) + 1
+    postnum = post_list[-1]["postnum"] + 1
     doc = {
         'uid': uid,
         'postnum': postnum,
@@ -177,10 +178,15 @@ def fix_post():
 
     return jsonify({'msg': "수정 성공"})
 
-
+@app.route('/delete', methods=["POST"])
+def remove_post():
+    postnum = request.form['postnum']
+    db.post.delete_one({'postnum': int(postnum)})
+    return jsonify({'msg': "삭제 완료"})
 # 목록 전체 조회
 @app.route('/list/<category>')
 def show_list(category):
+    uid = request.cookies.get('uid')
     uid_dict = request.args.to_dict()
     if "page" in uid_dict:
         page = int(uid_dict["page"])
@@ -203,13 +209,13 @@ def show_list(category):
     # 출력할 포스트
     category_posts = db.post.find(find).sort([( '$natural', -1 )]).skip(skip).limit(limit)
 
-    return render_template("list.html", category=category, posts=category_posts, uid=uid_dict["uid"], pagecount=pagecount, page=page)
+    return render_template("list.html", category=category, posts=category_posts, uid=uid, pagecount=pagecount, page=page)
 
 
 # 마이페이지
 @app.route('/mypage')
 def mypage_pw():
-    uid = request.args.get("uid")
+    uid = request.cookies.get('uid')
     print(uid)
     return render_template("mypage.html", category="mypage_pwconfirm", uid=uid)
 
@@ -217,7 +223,7 @@ def mypage_pw():
 @app.route('/pwcheck', methods=['POST'])
 def pwcheck():
     print(request)
-    uid_receive = request.form["uid_give"]
+    uid_receive = request.cookies.get('uid')
     password_receive = request.form["password_give"]
     # uid_receive = request.form.get('uid_give', False)
     # password_receive = request.form.get('password_give', False)
@@ -234,7 +240,7 @@ def pwcheck():
 
 @app.route('/mypage/<category>')
 def mypage(category):
-    uid = request.args.get("uid")
+    uid = request.cookies.get('uid')
     uid_dict = request.args.to_dict()
     data = db.users.find_one({"uid":uid}, {"_id":False})
     if "page" in uid_dict:
@@ -314,7 +320,7 @@ def mypage(category):
 # 회원 탈퇴 기능
 @app.route('/quit', methods=["POST"])
 def quit():
-    uid = request.form["id_give"]
+    uid = request.cookies.get('uid')
     # 유저 데이터에 is_quit 인자를 추가해서 soft delete.
     # TODO: 로그인 기능에서도 is_quit 인자가 있는지, 변수가 1인지 검사하고 로그인 통과시켜야 합니다.
     db.users.update_one({"uid":uid}, {"$set": {"is_quit": 1}})
@@ -324,7 +330,7 @@ def quit():
 # 비밀번호 변경 기능
 @app.route('/mypage/pwchange', methods=["POST"])
 def pwchange():
-    uid = request.form["id_give"]
+    uid = request.cookies.get('uid')
     pw = request.form["password_give"]
     password_hash = hashlib.sha256(pw.encode('utf-8')).hexdigest()
     print(password_hash)
@@ -337,7 +343,7 @@ def pwchange():
 def reply_sample():
     # TODO : 기능 확인을 위해 댓글 페이지를 따로 뺐으나 포스트 상세 페이지 쪽으로 해당 api의 위치를 옮겨야 함.
     # 임시로 uid와 postnum를 받아오는 곳이 있지만 Post 상세 페이지에서 사용할 경우 해당 페이지의 uid와 postnum을 사용하면 됨.
-    uid = request.args.get("uid")
+    uid = request.cookies.get('uid')
     postnum = int(request.args.get("postnum"))
 
     # TODO : 상세 페에지에서 불러오는 포스트 내용으로 아래 replies 를 대체할 수 있으며, 대체해야 한다.
@@ -361,8 +367,8 @@ def reply_sample():
 def reply_post():
     # 클라이언트로부터 댓글 작성 데이터 수집
     postnum_receive = int(request.form['postnum_give'])
-    uid_receive = request.form['uid_give']
-    name_receive = db.users.find_one({"uid":uid_receive}, {"_id":False})["nickname"]
+    uid = request.cookies.get('uid')
+    name_receive = db.users.find_one({"uid":uid}, {"_id":False})["nickname"]
     text_receive = request.form['text_give']
 
     # replynum 결정. 댓글이 없다면 0, 있다면 마지막 댓글의 replynum에 +1
@@ -382,7 +388,7 @@ def reply_post():
 
     # 완성된 데이터
     data = {
-        'uid': uid_receive,
+        'uid': uid,
         "name": name_receive,
         "text": text_receive,
         "replynum": int(replies_num + 1),
