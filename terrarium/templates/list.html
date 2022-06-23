@@ -85,6 +85,48 @@
 					</div>
 					{% endfor %}
 				</div>
+
+				<!-- pagination -->
+				<div class="navigation-box">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+							<!-- 왼쪽 화살표 -->
+                            <li class="page-item">
+								{% if page < 2 %}
+								<a class="page-link disabled" href="javascript:void(0)" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                                {% else %}
+								<a class="page-link" href="/list/{{category}}?page={{page-1}}&uid={{uid}}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+								{% endif %}
+                            </li>
+
+							<!-- 각 페이지 번호 -->
+							{% for n in range(1, pagecount+1) %}
+								{% if page == n %}
+                            		<li class="page-item"><a class="page-link active" href="/list/{{category}}?page={{n}}&uid={{uid}}">{{n}}</a></li>
+								{% else %}
+							 		<li class="page-item"><a class="page-link" href="/list/{{category}}?page={{n}}&uid={{uid}}">{{n}}</a></li>
+								{% endif %}
+							{% endfor %}
+
+							<!-- 오른쪽 화살표 -->
+                            <li class="page-item">
+                                {% if page >= pagecount %}
+								<a class="page-link disabled" href="javascript:void(0)" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                                {% else %}
+								<a class="page-link" href="/list/{{category}}?page={{page+1}}&uid={{uid}}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+								{% endif %}
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
 			</div>
 		</div>
 	</div>
