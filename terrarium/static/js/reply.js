@@ -1,7 +1,6 @@
 console.log($("#reply_textarea").val());
 
 function reply_post(postnum, uid) {
-  console.log(postnum, uid);
   let text = $("#reply_textarea" + postnum).val();
   if (text == "") {
     alert("댓글 내용을 입력해주세요!");
