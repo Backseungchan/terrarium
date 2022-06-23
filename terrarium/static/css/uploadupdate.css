@@ -47,11 +47,10 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-}
-
-#thumbnail {
-	width: auto;
-	height: 100%;
+	
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
 }
 
 .button-box {

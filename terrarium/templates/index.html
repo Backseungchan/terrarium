@@ -35,6 +35,7 @@
 	<script>
 		function sign_out() {
 			$.removeCookie('mytoken', { path: '/' });
+			$.removeCookie('uid', { path: '/' });
 			alert('로그아웃!')
 			window.location.href = "login"
 		}

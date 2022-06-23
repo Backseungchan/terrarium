@@ -77,6 +77,26 @@ a {
 	width: 100%;
 }
 
+.content{
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.right-align {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	
+	justify-content: right;
+	text-align: right;
+}
+
+.card-img-top {
+	height: 250px;
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
 .edit-button {
 	visibility: hidden;
 }

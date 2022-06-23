@@ -128,6 +128,7 @@ def save_post():
     title = request.form['title']
     contents = request.form['contents']
     category = request.form['category']
+    user = db.users.find_one({"uid":uid}, {"_id":False})
     try:
         pic = request.files["pic"]
         filename, extension = pic.filename.split('.')  # 파일의 이름, 확장자
@@ -140,6 +141,7 @@ def save_post():
     postnum = post_list[-1]["postnum"] + 1
     doc = {
         'uid': uid,
+        'nickname': user["nickname"],
         'postnum': postnum,
         'category': category,
         'title': title,
@@ -188,6 +190,7 @@ def remove_post():
 @app.route('/list/<category>')
 def show_list(category):
     uid = request.cookies.get('uid')
+    print("list cookies", uid)
     uid_dict = request.args.to_dict()
     if "page" in uid_dict:
         page = int(uid_dict["page"])
@@ -378,10 +381,11 @@ def reply_post():
         # replies_num = len(list(db.post.find_one({"postnum": postnum_receive}, {"_id": False})["replies"]))
         # replies_num = int(db.post.aggregate([{"$addFields": {"lastElem": {"$last": "$replies"}}}])["replynum"])
         if "replies" in a_post:
-            lastone = list(a_post["replies"]).pop()
-            replies_num = lastone["replynum"]
-        elif len(list(a_post["replies"])) == 0:
-            replies_num = 0
+            if len(list(a_post["replies"])) == 0:
+                replies_num = 0
+            else:
+                lastone = list(a_post["replies"]).pop()
+                replies_num = lastone["replynum"]
         else:
             replies_num = 0
     else:
