@@ -61,25 +61,17 @@ def sign_in():
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     # ID, 암호화 된 PW를 가지고 해당 유저 찾기
     result = db.users.find_one({'uid': uid_receive, 'password': pw_hash})
-    result2 = result["is_quit"]
-
-    #is_quit(회원가입 시 0 탈퇴 시 1)
-    if result2 == 1:
-        return jsonify({'result': 'fail', 'msg': '탈퇴한 회원입니다.'})
-
+    #is_quit(회원가입 시 0,비회원일시 0, 탈퇴 시 1)
     # 찾으면 JWT 토큰 만들어 발급
-    elif result is not None:
+    if result is not None and result["is_quit"] == 0:
         payload = {
             'id': uid_receive,
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 1일 유지
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
-
         return jsonify({'result': 'success', 'token': token, 'uid':uid_receive})
-
     else:
         return jsonify({'result': 'fail', 'msg': '존재하지 않는 아이디거나 비밀번호가 일치하지 않습니다.'})
-
 
 @app.route('/sign_up/save', methods=['POST'])
 def sign_up():
@@ -123,14 +115,12 @@ def load_updatePage():
     uid = request.cookies.get('uid')
     return render_template("updatepage.html", uid=uid)
 
-
 @app.route("/detail", methods=["GET"])
 def get_post():
     args_dict = request.args.to_dict()  # postnum을 dict형태로 가져옴
     # postnum과 일치하는 post를 db에서 가져옴
     post = list(db.post.find({'postnum': int(args_dict["postnum"])}, {'_id': False, }))
     return jsonify({'post': post})
-
 
 @app.route('/upload', methods=['POST'])
 def save_post():
