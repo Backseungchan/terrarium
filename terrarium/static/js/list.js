@@ -4,8 +4,17 @@ function updateButton(postnum, category) {
 }
 
 function deleteButton(postnum) {
-  location.href =
-    "../updatepage" + "?category=" + category + "&postnum=" + postnum;
+  $.ajax({
+    type: "POST",
+    url: "/delete",
+    data: {
+      postnum: postnum,
+    },
+    success: function (response) {
+      alert(response["msg"]);
+      window.location.reload();
+    },
+  });
 }
 
 function myPage() {

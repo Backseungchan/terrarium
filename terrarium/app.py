@@ -178,7 +178,11 @@ def fix_post():
 
     return jsonify({'msg': "수정 성공"})
 
-
+@app.route('/delete', methods=["POST"])
+def remove_post():
+    postnum = request.form['postnum']
+    db.post.delete_one({'postnum': int(postnum)})
+    return jsonify({'msg': "삭제 완료"})
 # 목록 전체 조회
 @app.route('/list/<category>')
 def show_list(category):
