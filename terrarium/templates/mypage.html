@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block script %}
+	<script src="../static/js/list.js"></script>
 	<script>
 
 		// 현재 페이지
@@ -302,7 +303,7 @@
 										<button type="button" class="btn btn-sm btn-outline-success"
 											onclick="deleteButton({{post.postnum}})">게시물 삭제</button>
 										<button type="button" class="btn btn-sm btn-outline-success"
-											onclick="updateButton({{post.postnum}},'{{category}}')">게시물 수정</button>
+											onclick="updateButton({{post.postnum}},'{{post.category}}')">게시물 수정</button>
 										{% endif %}
 									</div>
 								</div>
@@ -580,7 +581,7 @@
 										<button type="button" class="btn btn-sm btn-outline-success"
 											onclick="deleteButton({{post.postnum}})">게시물 삭제</button>
 										<button type="button" class="btn btn-sm btn-outline-success"
-											onclick="updateButton({{post.postnum}},'{{category}}')">게시물 수정</button>
+											onclick="updateButton({{post.postnum}},'{{post.category}}')">게시물 수정</button>
 										{% endif %}
 									</div>
 								</div>

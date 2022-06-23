@@ -200,6 +200,7 @@ def remove_post():
 @app.route('/list/<category>')
 def show_list(category):
     uid = request.cookies.get('uid')
+    print("list cookies", uid)
     uid_dict = request.args.to_dict()
     if "page" in uid_dict:
         page = int(uid_dict["page"])

@@ -92,7 +92,11 @@ function fixing() {
     processData: false,
     success: async function (response) {
       alert(response["msg"]);
-      location.href = "../list/" + category;
+      if (category == "home") {
+        location.href = "../mypage/" + category;
+      } else {
+        location.href = "../list/" + category;
+      }
     },
   });
 }
