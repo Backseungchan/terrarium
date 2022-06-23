@@ -69,7 +69,8 @@
 										<div class="reply-write-box">
 											<div class="form-group">
 												<label for="reply_textarea">댓글 작성하기</label>
-												<textarea class="form-control" id="reply_textarea" rows="3"></textarea>
+												<textarea class="form-control" id="reply_textarea{{post.postnum}}"
+													rows="3"></textarea>
 											</div>
 											<div style="width: 100%; text-align: right">
 												<button onclick="reply_post({{ post.postnum }}, '{{ uid }}')"
