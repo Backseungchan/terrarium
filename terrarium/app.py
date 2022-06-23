@@ -2,7 +2,7 @@
 import datetime
 from unicodedata import category
 import certifi
-from pymongo import MongoClient
+from pymongo import MongoClient, DESCENDING
 import jwt
 import datetime
 import hashlib
@@ -182,10 +182,28 @@ def fix_post():
 @app.route('/list/<category>')
 def show_list(category):
     uid_dict = request.args.to_dict()
-    print("hello")
-    print(type(uid_dict["uid"]))
-    category_posts = list(db.post.find({'category': category}, {'_id': False, 'category': False}))
-    return render_template("list.html", category=category, posts=category_posts, uid=uid_dict["uid"])
+    if "page" in uid_dict:
+        page = int(uid_dict["page"])
+    else:
+        page = 1
+
+    # all_post = 해당 카테고리의 모든 포스트 수
+    all_post = db.post.count_documents({"category":category})
+
+    # db 쿼리용 데이터
+    find = {"category": category}
+
+    # 6개 = 1페이지
+    limit = 6
+    skip = int(limit * (page-1))
+
+    # 위에서 정한 limit에 따른 모든 페이지 수
+    pagecount = int(all_post / limit) + (0 if ((all_post % limit) == 0) else 1)
+
+    # 출력할 포스트
+    category_posts = db.post.find(find).skip(skip).limit(limit)
+
+    return render_template("list.html", category=category, posts=category_posts, uid=uid_dict["uid"], pagecount=pagecount, page=page)
 
 
 # 마이페이지
@@ -193,7 +211,7 @@ def show_list(category):
 def mypage_pw():
     uid = request.args.get("uid")
     print(uid)
-    return render_template("mypage.html", page="mypage_pwconfirm", uid=uid)
+    return render_template("mypage.html", category="mypage_pwconfirm", uid=uid)
 
 
 @app.route('/pwcheck', methods=['POST'])
@@ -214,17 +232,24 @@ def pwcheck():
     return jsonify({"status":"none"})
 
 
-@app.route('/mypage/<page>')
-def mypage(page):
+@app.route('/mypage/<category>')
+def mypage(category):
     uid = request.args.get("uid")
+    uid_dict = request.args.to_dict()
     data = db.users.find_one({"uid":uid}, {"_id":False})
+    if "page" in uid_dict:
+        page = int(uid_dict["page"])
+    else:
+        page = 1
+    pagecount = 0
+
     print(data)
     # 홈일 경우 최근 작성한 게시글 3개와 최근 작성한 댓글 3개
-    if page == "home":
+    if category == "home":
         recent_posts = list(db.post.find({"uid": uid}, {"_id":False}).limit(3))
         data["recent_posts"] = recent_posts
         # 각 포스트의 replies에서 uid가 일치하는 댓글을 리스트로 가져온다.
-        recent_replies = list(db.posts.aggregate([
+        recent_replies = list(db.post.aggregate([
             {"$match": {"replies.uid": uid}},
             {"$unwind": "$replies"},
             {"$match": {"replies.uid": uid}},
@@ -232,25 +257,58 @@ def mypage(page):
             {"$limit": 3}
         ]))
         data["recent_replies"] = recent_replies
+
     # 작성한 게시글
-    elif page == "posts":
-        posts = list(db.post.find({"uid": uid}, {"_id": False}))
+    elif category == "posts":
+        # all_post = 해당 카테고리의 모든 포스트 수
+        all_post = db.post.count_documents({"uid": uid})
+
+        # db 쿼리용 데이터
+        find = {"uid": uid}
+
+        # 6개 = 1페이지
+        limit = 6
+        skip = int(limit * (page - 1))
+
+        # 위에서 정한 limit에 따른 모든 페이지 수
+        pagecount = int(all_post / limit) + (0 if ((all_post % limit) == 0) else 1)
+
+        # 출력할 포스트
+        posts = list(db.post.find(find).skip(skip).limit(limit))
+        # posts = list(db.post.find({"uid": uid}, {"_id": False}))
         data["posts"] = posts
+
     # 작성한 댓글
-    elif page == "replies":
+    elif category == "replies":
         # 각 포스트의 replies에서 uid가 일치하는 댓글을 리스트로 가져온다.
-        replies = list(db.post.aggregate([
+        all_replies = len(list(db.post.aggregate([
             {"$match":{"replies.uid": uid}},
             {"$unwind": "$replies"},
             {"$match":{"replies.uid": uid}},
             {"$sort": {"replies.created_at": -1}},
+        ])))
+        # 10개 = 1페이지
+        limit = 10
+        skip = int(limit * (page - 1))
+
+        # 위에서 정한 limit에 따른 모든 페이지 수
+        pagecount = int(all_replies / limit) + (0 if ((all_replies % limit) == 0) else 1)
+
+        replies = list(db.post.aggregate([
+            {"$match": {"replies.uid": uid}},
+            {"$unwind": "$replies"},
+            {"$match": {"replies.uid": uid}},
+            {"$sort": {"replies.created_at": -1}},
+            {"$skip": skip},
+            {"$limit": limit}
         ]))
+
         data["replies"] = replies
-    elif page == "/":
+    elif category == "/":
         page = "mypage_pwconfirm"
 
     print(data)
-    return render_template("mypage.html", page=page, data=data, uid=uid)
+    return render_template("mypage.html", category=category, data=data, uid=uid, pagecount=pagecount, page=page)
 
 
 # 회원 탈퇴 기능
@@ -283,13 +341,15 @@ def reply_sample():
     postnum = int(request.args.get("postnum"))
 
     # TODO : 상세 페에지에서 불러오는 포스트 내용으로 아래 replies 를 대체할 수 있으며, 대체해야 한다.
-    replies = db.posts.find_one({"postnum": postnum}, {"_id":False})
+    replies = db.post.find_one({"postnum": postnum}, {"_id":False})
+    print(uid, postnum, replies)
+    print(type(uid), type(postnum), type(replies))
 
     # 만약 해당 포스트에 댓글이 없다면, 댓글 목록(replies_list)를 빈 리스트로 넘긴다. None으로 넘길 시 오류 발생.
     if "replies" in replies:
         replies_list = list(replies["replies"])
-    elif len(list(replies["replies"])) == 0:
-        replies_list = []
+        if len(replies_list) == 0:
+            replies_list = []
     else:
         replies_list = []
 
@@ -306,10 +366,10 @@ def reply_post():
     text_receive = request.form['text_give']
 
     # replynum 결정. 댓글이 없다면 0, 있다면 마지막 댓글의 replynum에 +1
-    a_post = db.posts.find_one({"postnum": postnum_receive}, {"_id":False})
+    a_post = db.post.find_one({"postnum": postnum_receive}, {"_id":False})
     if "replies" in a_post:
-        # replies_num = len(list(db.posts.find_one({"postnum": postnum_receive}, {"_id": False})["replies"]))
-        # replies_num = int(db.posts.aggregate([{"$addFields": {"lastElem": {"$last": "$replies"}}}])["replynum"])
+        # replies_num = len(list(db.post.find_one({"postnum": postnum_receive}, {"_id": False})["replies"]))
+        # replies_num = int(db.post.aggregate([{"$addFields": {"lastElem": {"$last": "$replies"}}}])["replynum"])
         if "replies" in a_post:
             lastone = list(a_post["replies"]).pop()
             replies_num = lastone["replynum"]
@@ -326,12 +386,12 @@ def reply_post():
         "name": name_receive,
         "text": text_receive,
         "replynum": int(replies_num + 1),
-        "created_at": datetime.datetime.now(),
+        "created_at": datetime.now(),
     }
 
     # db 업데이트
     # 참고 : post 안의 list에 업데이트 하는 것이기 때문에 $push를 사용하였음.
-    db.posts.update_one({"postnum":postnum_receive}, {'$push': {'replies': data}})
+    db.post.update_one({"postnum":postnum_receive}, {'$push': {'replies': data}})
     return jsonify({"status":"success"})
 
 
@@ -341,7 +401,7 @@ def reply_delete():
     # postnum과 replynum을 받아서 삭제 처리한다. 작성과 마찬가지로 오브젝트 안 list이기 때문에 $pull을 사용.
     postnum_receive = int(request.form['postnum_give'])
     replynum_receive = int(request.form['replynum_give'])
-    db.posts.update_one({"postnum": postnum_receive}, {'$pull': {'replies': {"replynum" : int(replynum_receive)}}})
+    db.post.update_one({"postnum": postnum_receive}, {'$pull': {'replies': {"replynum" : int(replynum_receive)}}})
     return jsonify({"status":"success"})
 
 
@@ -352,7 +412,7 @@ def reply_update():
     postnum_receive = int(request.form['postnum_give'])
     replynum_receive = int(request.form['replynum_give'])
     text_receive = request.form['text_give']
-    db.posts.update_one({"postnum": postnum_receive, "replies.replynum":replynum_receive}, {'$set': {"replies.$.text":text_receive}})
+    db.post.update_one({"postnum": postnum_receive, "replies.replynum":replynum_receive}, {'$set': {"replies.$.text":text_receive}})
     return jsonify({"status":"success"})
 
 
