@@ -20,7 +20,7 @@ function getCookie(cName) {
 
 //기존의 내용 채워두기
 function setUp(postnum) {
-  $.ajax({
+  $.ajax({git
     type: "GET",
     url: "/detail",
     data: { postnum: postnum },

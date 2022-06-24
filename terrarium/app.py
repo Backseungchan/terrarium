@@ -273,7 +273,7 @@ def mypage(category):
             {"$limit": 3}
         ]))
         data["recent_replies"] = recent_replies
-
+       
     # 작성한 게시글
     elif category == "posts":
         # all_post = 해당 카테고리의 모든 포스트 수
